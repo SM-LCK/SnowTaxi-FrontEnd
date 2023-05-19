@@ -6,8 +6,8 @@ function TaxiRouteListPage({navigation}) {
   return (
     <View style={styles.container}>
       <View style={styles.text}>
-        <Text>도착지는 숙대입구 후문입니다.</Text>
-        <Text>출발지를 선택해주세요.</Text>
+        <Text style={{fontSize: 15}}>도착지는 숙대입구 후문입니다.</Text>
+        <Text style={{fontSize: 15, marginTop: 5}}>출발지를 선택해주세요.</Text>
       </View>
       <TouchableOpacity
         onPress={() => navigation.navigate('TaxiPotList', {id: '숙대입구'})}
