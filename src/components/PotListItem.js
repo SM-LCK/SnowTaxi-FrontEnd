@@ -2,9 +2,10 @@ import React, {useState} from 'react';
 import {Button, Pressable, StyleSheet, Text, View, Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import BlueButton from './BlueButton';
 
 function PotListItem({data}) {
-  const {id, from, title, people, state} = data.item;
+  const {id, route, ridingTime, createdAt, people, state} = data.item;
   {
     /* const [from, setFrom] = useState('');
   const [title, setTitle] = useState('');
@@ -41,7 +42,7 @@ function PotListItem({data}) {
           justifyContent: 'space-between',
         }}>
         <View style={{margin: 15}}>
-          <Text style={{fontSize: 18, fontWeight: 500}}>{title}</Text>
+          <Text style={{fontSize: 18, fontWeight: 500}}>{ridingTime}</Text>
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
             {Array(people).fill(<Icon name="person" size={18} />)}
             {Array(4 - people).fill(<Icon name="person-outline" size={18} />)}
@@ -73,7 +74,10 @@ const styles = StyleSheet.create({
   },
   itemButton: {
     margin: 15,
-    backgroundColor: '#007AFF',
+    //backgroundColor: '#007AFF',
+    //borderColor: '#007AFF',
+    //background: '#4274FF',
+    borderRadius: 100,
   },
 });
 

@@ -1,40 +1,86 @@
-import React, {useState} from 'react';
-import {View, Text, Button, StyleSheet, FlatList, Image} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  FlatList,
+  Image,
+  Pressable,
+} from 'react-native';
 import PotListItem from '../components/PotListItem';
 import DATA from '../data';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import Icon from 'react-native-vector-icons/AntDesign';
+import {useNavigation} from '@react-navigation/native';
 
 function TaxiPotListPage({route, navigation}) {
-  const {id} = route.params; //{"id":'서울역 '}
-  const hereData = [];
-  DATA.map(data => {
-    if (data.from === id) hereData.push(data);
-  });
+  const {id} = route.params; //{"id":'서울역'}
+
+  const [hereData, setHereData] = useState(
+    DATA.filter(data => data.route === id),
+  );
 
   const currentdate = new Date();
   const year = currentdate.getFullYear();
   const month = currentdate.getMonth() + 1;
   const date = currentdate.getDate();
   let day;
-  let weak = ['일', '월', '화', '수', '목', '금', '토'];
+  let week = ['일', '월', '화', '수', '목', '금', '토'];
   for (let i = 0; i <= 6; i++) {
     if (currentdate.getDay() == i) {
-      day = weak[i];
+      day = week[i];
     }
   }
   const today = `${year}.${month}.${date} ${day}`;
 
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = time => {
+    const newData = {
+      id: '',
+      route: id,
+      ridingTime: time.toLocaleTimeString().slice(0, -3),
+      createdAt: '',
+      state: '참여중',
+      people: 1,
+    };
+
+    setHereData([...hereData, newData]);
+    hideDatePicker();
+  };
+
+  const goBack = () => {
+    navigation.goBack();
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.first}>
-        <Text style={styles.first.title}>
-          {id}
-          {' → 숙명여대 후문'}
-        </Text>
+        <View
+          style={{flexDirection: 'row', alignItems: 'center', marginTop: 15}}>
+          <Pressable onPress={goBack} style={{left: 10}}>
+            <Icon name="left" size={25} style={{margin: 15}} />
+          </Pressable>
+          <Text style={styles.first.title}>
+            {id}
+            {' → 숙명여대 후문'}
+          </Text>
+        </View>
         <Image source={require('../../assets/sookmyung2.png')} />
       </View>
+
       <View
         style={{
+          marginTop: 10,
           borderBottomColor: 'black',
           borderBottomWidth: StyleSheet.hairlineWidth,
         }}
@@ -46,14 +92,15 @@ function TaxiPotListPage({route, navigation}) {
           <Text>모든 정산 금액은 기본 요금인 4800원입니다.</Text>
         </View>
         <View style={styles.second.buttons}>
-          <Text>팟 만들기</Text>
-          {/*<Button title="팟 생성하기" onPress={onDatePicker} />
-          <DateTimePicker
+          <Button title="팟 만들기" onPress={showDatePicker} />
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
             mode="time"
-            value={new Date()}
-            disabled={datePickerVisible}
-      />*/}
-          <DateTimePicker mode="time" value={new Date()} />
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+            cancelTextIOS="취소하기"
+            confirmTextIOS="탑승시간 선택"
+          />
         </View>
 
         {hereData.length == 0 ? (
@@ -72,7 +119,7 @@ function TaxiPotListPage({route, navigation}) {
             <FlatList
               data={hereData}
               renderItem={item => <PotListItem data={item} />}
-              keyExtractor={item => item.id}
+              keyExtractor={item => item.id.toString()}
             />
           </View>
         )}
@@ -88,12 +135,11 @@ const styles = StyleSheet.create({
   },
   first: {
     flex: 1,
-    height: 150,
-    alignItems: 'center',
+    marginBottom: 10,
     title: {
       fontSize: 20,
       fontWeight: 'bold',
-      margin: 10,
+      marginLeft: 35,
     },
   },
   second: {
@@ -109,7 +155,7 @@ const styles = StyleSheet.create({
     },
     buttons: {
       alignItems: 'center',
-      marginLeft: 230,
+      marginLeft: 250,
       marginBottom: 10,
     },
     flat: {
