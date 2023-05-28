@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {View, Text, Button, StyleSheet, Image} from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  Image,
+  SafeAreaView,
+} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 function TaxiRouteListPage({navigation}) {
@@ -56,8 +63,10 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 15,
   },
+
   text: {
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
     marginBottom: 30,
     alignItems: 'center',
     color: '#5C5C5C',

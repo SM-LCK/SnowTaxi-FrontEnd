@@ -2,33 +2,32 @@ import React, {useState} from 'react';
 import {Button, Pressable, StyleSheet, Text, View, Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import BlueButton from './BlueButton';
+import {BlueButton} from './MyButtons';
 
 function PotListItem({data}) {
-  const {id, route, ridingTime, createdAt, people, state} = data.item;
-  {
-    /* const [from, setFrom] = useState('');
-  const [title, setTitle] = useState('');
-  const [state, setState] = useState('');
-  const [people, setPeople] = useState(0);
-
-  if (data.item == null) {
-    <Text>아직 모집중인 팟이 없습니다.</Text>;
-  } 
-*/
-  }
+  const {date, from, ridingTime, createdAt, people, state} = data;
   const navigation = useNavigation();
 
-  const gotoRidingTaxi = () => {
-    Alert.alert('참여하시겠습니까?', [
+  const goTogether = () => {
+    Alert.alert('참여하시겠습니까?', '', [
       {
         text: '아니오',
-        onPress: () => {},
+        onPress: () => {
+          //navigation.goBack();
+        },
         style: 'cancel',
       },
       {
         text: '네',
-        onPress: () => navigation.navigate('RidingStack'),
+        onPress: () =>
+          navigation.navigate('RidingStack', {
+            screen: 'RidingTaxi',
+            params: {
+              from: from,
+              ridingTime: ridingTime,
+              state: state,
+            },
+          }),
       },
     ]);
   };
@@ -48,19 +47,25 @@ function PotListItem({data}) {
             {Array(4 - people).fill(<Icon name="person-outline" size={18} />)}
           </View>
         </View>
-        {state === '참여중' ? (
-          <Button
-            style={styles.itemButton}
-            title={state}
-            onPress={() => navigation.navigate('RidingStack')}
-          />
-        ) : (
-          <Button
-            style={styles.itemButton}
-            title={state}
-            onPress={() => navigation.navigate('RidingStack')}
-          />
-        )}
+        <View style={{margin: 15}}>
+          {state === '참여중' ? (
+            <BlueButton
+              text={state}
+              onPress={() =>
+                navigation.navigate('RidingStack', {
+                  screen: 'RidingTaxi',
+                  params: {
+                    from: from,
+                    ridingTime: ridingTime,
+                    state: state,
+                  },
+                })
+              }
+            />
+          ) : (
+            <BlueButton text={state} onPress={goTogether} />
+          )}
+        </View>
       </View>
     </Pressable>
   );
@@ -68,16 +73,9 @@ function PotListItem({data}) {
 const styles = StyleSheet.create({
   itemContainer: {
     height: 70,
-    backgroundColor: '#EFEFEF',
+    backgroundColor: '#F8F8F8',
     marginBottom: 15,
     borderRadius: 20,
-  },
-  itemButton: {
-    margin: 15,
-    //backgroundColor: '#007AFF',
-    //borderColor: '#007AFF',
-    //background: '#4274FF',
-    borderRadius: 100,
   },
 });
 

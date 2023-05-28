@@ -1,0 +1,67 @@
+{
+  "data": [
+    {
+      "id": 221,
+      "from": "숙대입구",
+      "ridingTime": "오전 10:40",
+      "createdAt": "",
+      "state": "참여중", //회원id에 팟id가 있는지?
+      "people": 1,
+      "date": "2023.5.28"
+    },
+    {
+      "id": 222,
+      "from": "숙대입구",
+      "ridingTime": "오전 10:40",
+      "createdAt": "",
+      "state": "참여하기", //회원id에 팟id가 있는지?
+      "people": 2,
+      "date": "2023.5.28"
+    },
+    {
+      "id": 223,
+      "from": "숙대입구",
+      "ridingTime": "오전 10:40",
+      "createdAt": "",
+      "state": "참여하기", //회원id에 팟id가 있는지?
+      "people": 3,
+      "date": "2023.5.26"
+    },
+    {
+      "id": 224,
+      "from": "숙대입구",
+      "ridingTime": "오전 10:40",
+      "createdAt": "",
+      "state": "참여하기", //회원id에 팟id가 있는지?
+      "people": 1,
+      "date": "2023.5.26"
+    },
+    {
+      "id": 225,
+      "from": "효창공원앞",
+      "ridingTime": "오전 10:40",
+      "createdAt": "",
+      "state": "참여하기",
+      "people": 3,
+      "date": "2023.5.26"
+    },
+    {
+      "id": 226,
+      "from": "효창공원앞",
+      "ridingTime": "오전 10:40",
+      "createdAt": "",
+      "state": "참여하기",
+      "people": 4,
+      "date": "2023.5.26"
+    },
+    {
+      "id": 227,
+      "from": "서울역",
+      "ridingTime": "오전 10:40",
+      "createdAt": "",
+      "state": "참여하기",
+      "people": 3,
+      "date": "2023.5.26"
+    }
+  ]
+}

@@ -32,7 +32,7 @@ function MainTab() {
         name="MyStack"
         component={MyStack}
         options={{
-          tabBarLabel: '마이페이지',
+          tabBarLabel: '마이 페이지',
           tabBarIcon: () => <Icon name="md-settings-outline" size={26} />,
         }}
       />
