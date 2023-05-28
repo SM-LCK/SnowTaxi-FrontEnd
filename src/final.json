@@ -1,0 +1,165 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "phone": "010-0000-0000",
+      "profile": "../assets/profile.png",
+      "name": "최수연",
+      "cash": 10000,
+      "payed": 1, //블록체인 부분
+      //매번 현재 보여주는 리스트중에 pot id가 있는지 확인 후 state 0 1 결정 (1은 하나밖에 안됨)
+      "pot": [
+        {
+          "id": 100,
+          "from": "숙대입구",
+          "ridingTime": "오전 10:40",
+          "createdAt": "",
+          "state": 1,
+          "people": 1,
+          "date": "2023.5.23"
+        },
+        {
+          "id": 101,
+          "from": "숙대입구",
+          "ridingTime": "오전 10:40",
+          "createdAt": "",
+          "state": 0,
+          "people": 2,
+          "date": "2023.5.23"
+        },
+        {
+          "id": 102,
+          "from": "효창공원앞",
+          "ridingTime": "오전 10:40",
+          "createdAt": "",
+          "state": 0,
+          "people": 3,
+          "date": "2023.5.23"
+        },
+        {
+          "id": 103,
+          "from": "효창공원앞",
+          "ridingTime": "오전 10:40",
+          "createdAt": "",
+          "state": 0,
+          "people": 4,
+          "date": "2023.5.23"
+        },
+        {
+          "id": 104,
+          "from": "서울역",
+          "ridingTime": "오전 10:40",
+          "createdAt": "",
+          "state": 0,
+          "people": 3,
+          "date": "2023.5.23"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "phone": "010-0000-0001",
+      "profile": "",
+      "name": "김영경",
+      "cash": 20000,
+      "captain": 0,
+      "payed": 1,
+      "pot": [
+        {
+          "id": 105,
+          "from": "숙대입구",
+          "ridingTime": "오전 10:40",
+          "createdAt": "",
+          "state": 0,
+          "people": 1,
+          "date": "2023.5.23"
+        },
+        {
+          "id": 106,
+          "from": "숙대입구",
+          "ridingTime": "오전 10:40",
+          "createdAt": "",
+          "state": 1,
+          "people": 2,
+          "date": "2023.5.23"
+        },
+        {
+          "id": 107,
+          "from": "숙대입구",
+          "ridingTime": "오전 10:40",
+          "createdAt": "",
+          "state": 0,
+          "people": 3,
+          "date": "2023.5.23"
+        },
+        {
+          "id": 108,
+          "from": "숙대입구",
+          "ridingTime": "오전 10:40",
+          "createdAt": "",
+          "state": 0,
+          "people": 1,
+          "date": "2023.5.13"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "phone": "010-0000-0002",
+      "profile": "",
+      "name": "이가은",
+      "cash": 30000,
+      "captain": 0,
+      "payed": 0,
+      "pot": [
+        {
+          "id": 109,
+          "from": "효창공원앞",
+          "ridingTime": "오전 10:40",
+          "createdAt": "",
+          "state": 0,
+          "people": 3,
+          "date": "2023.5.23"
+        },
+        {
+          "id": 110,
+          "from": "효창공원앞",
+          "ridingTime": "오전 10:40",
+          "createdAt": "",
+          "state": 0,
+          "people": 4,
+          "date": "2023.5.23"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "phone": "010-0000-0003",
+      "profile": "",
+      "name": "김탄",
+      "cash": 40000,
+      "captain": 0,
+      "payed": 0,
+      "pot": [
+        {
+          "id": 111,
+          "from": "서울역",
+          "ridingTime": "오전 10:40",
+          "createdAt": "",
+          "state": 0,
+          "people": 3,
+          "date": "2023.5.23"
+        },
+        {
+          "id": 112,
+          "from": "서울역",
+          "ridingTime": "오전 10:40",
+          "createdAt": "",
+          "state": 0,
+          "people": 4,
+          "date": "2023.5.23"
+        }
+      ]
+    }
+  ]
+}

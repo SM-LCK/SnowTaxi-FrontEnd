@@ -4,7 +4,7 @@ import {View, Text, StyleSheet} from 'react-native';
 function MyHistoryPage({navigation}) {
   return (
     <View style={styles.container}>
-      <Text>MyPage</Text>
+      <Text>MyHistory</Text>
     </View>
   );
 }

@@ -1,14 +1,34 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image, Dimensions} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Dimensions,
+  SafeAreaView,
+  Pressable,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
+import CashCard from '../components/CashCard';
+import people from '../people.json';
 
 function MyPage({navigation}) {
-  const windowWidth = Dimensions.get('window').width;
-  const windowHeight = Dimensions.get('window').height;
+  //console.warn(final.data);
+  let myUser;
+  Object.keys(people.data).forEach(key => {
+    if (people.data[key].id == 111) {
+      //id 1인 사람정보 추출
+      myUser = people.data[key];
+    }
+  });
+
+  const {name, phone, cash} = myUser;
+  // const windowWidth = Dimensions.get('window').width;
+  // const windowHeight = Dimensions.get('window').height;
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.myInfo}>
-        <Text style={{fontSize: 20, fontWeight: 'bold', margin: 10}}>
+        <Text style={{fontSize: 18, fontWeight: 'bold', margin: 10}}>
           나의 정보
         </Text>
         <View style={styles.myInfo.profile}>
@@ -17,8 +37,8 @@ function MyPage({navigation}) {
             source={require('../../assets/profile.png')}
           />
           <View style={styles.myInfo.profile.desc}>
-            <Text style={{fontWeight: 'bold'}}>최수연님</Text>
-            <Text>010-7399-5383</Text>
+            <Text style={{fontWeight: 'bold', fontSize: 15}}>{name}님</Text>
+            <Text style={{marginTop: 5}}>{phone}</Text>
           </View>
         </View>
       </View>
@@ -30,20 +50,12 @@ function MyPage({navigation}) {
       />
 
       <View style={styles.myCash}>
-        <Text style={{fontSize: 20, fontWeight: 'bold', margin: 10}}>
+        <Text style={{fontSize: 18, fontWeight: 'bold', margin: 10}}>
           나의 캐시
         </Text>
-        <Image
-          style={{
-            width: 350,
-            resizeMode: 'contain',
-            //justifyContent: 'center',
-            //alignItems: 'center',
-            marginLeft: 12,
-            marginTop: -280,
-          }}
-          source={require('../../assets/card.png')}
-        />
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+          <CashCard data={cash} />
+        </View>
       </View>
       <View
         style={{
@@ -59,10 +71,12 @@ function MyPage({navigation}) {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <Text style={{fontSize: 20, fontWeight: 'bold', margin: 10}}>
+          <Text style={{fontSize: 18, fontWeight: 'bold', margin: 10}}>
             참여 내역
           </Text>
-          <Icon name="right" size={20} />
+          <Pressable onPress={() => navigation.navigate('MyHistory')}>
+            <Icon name="right" size={18} />
+          </Pressable>
         </View>
         <View
           style={{
@@ -76,10 +90,10 @@ function MyPage({navigation}) {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <Text style={{fontSize: 20, fontWeight: 'bold', margin: 10}}>
+          <Text style={{fontSize: 18, fontWeight: 'bold', margin: 10}}>
             로그아웃
           </Text>
-          <Icon name="right" size={20} />
+          <Icon name="right" size={18} />
         </View>
         <View
           style={{
@@ -93,13 +107,13 @@ function MyPage({navigation}) {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <Text style={{fontSize: 20, fontWeight: 'bold', margin: 10}}>
+          <Text style={{fontSize: 18, fontWeight: 'bold', margin: 10}}>
             회원 탈퇴
           </Text>
-          <Icon name="right" size={20} />
+          <Icon name="right" size={18} />
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

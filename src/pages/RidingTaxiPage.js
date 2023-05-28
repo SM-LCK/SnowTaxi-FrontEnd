@@ -1,16 +1,119 @@
-import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet, SafeAreaView, FlatList} from 'react-native';
+import {BlueButton, OrButton} from '../components/MyButtons';
+import PeopleItem from '../components/PeopleItem';
+import people from '../people.json';
 
-function RidingTaxiPage({navigation}) {
-  //const {id} = route.params;
+//ridingTime,from,방장+참여자들 정보(이름,전화번호,전화걸기,문자하기)
+function RidingTaxiPage({route, navigation}) {
+  const {state, from, ridingTime} = route.params; //{"from":"숙대입구","ridingTime":"오전 10:40"}}
 
   return (
-    <View style={styles.container}>
-      <View style={styles.no}>
-        <Text>참여 중인</Text>
-        <Text>택시 팟이 없습니다..</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.yesTop}>
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: 'bold',
+            marginTop: 10,
+            marginLeft: 10,
+          }}>
+          탑승 정보
+        </Text>
+        <View
+          style={{
+            marginVertical: 10,
+            borderBottomColor: 'black',
+            borderBottomWidth: StyleSheet.hairlineWidth,
+          }}
+        />
+        <View
+          style={{
+            alignItems: 'flex-end',
+            marginRight: 15,
+          }}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Text
+              style={{
+                fontSize: 18,
+                //fontWeight: 'bold',
+                //marginTop: 10,
+                marginVertical: 5,
+              }}>
+              탑승시간:
+            </Text>
+            <Text
+              style={{
+                //color: '#3D70FF',
+                fontSize: 20,
+                fontWeight: 'bold',
+                //marginTop: 10,
+                marginLeft: 5,
+                marginVertical: 5,
+              }}>
+              {ridingTime}
+            </Text>
+          </View>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Text
+              style={{
+                fontSize: 18,
+                //fontWeight: 'bold',
+                marginVertical: 5,
+              }}>
+              출발:
+            </Text>
+            <Text
+              style={{
+                //color: '#3D70FF',
+                fontSize: 20,
+                fontWeight: 'bold',
+                marginVertical: 5,
+                marginLeft: 5,
+              }}>
+              {from}
+            </Text>
+          </View>
+
+          <Text style={{marginTop: 5}}>도착지는 숙대입구 후문입니다.</Text>
+          <Text style={{marginBottom: 5}}>
+            먼저 내리실 분들은 먼저 내려주세요.
+          </Text>
+          <View
+            style={{
+              marginVertical: 10,
+              flexDirection: 'row',
+            }}>
+            <BlueButton
+              onPress={() => navigation.navigate('DutchPay')}
+              text="정산하기"
+            />
+            <OrButton
+              onPress={() => {
+                navigation.goBack();
+              }}
+              text="나가기"
+            />
+          </View>
+        </View>
       </View>
-    </View>
+      <View
+        style={{
+          marginVertical: 10,
+          borderBottomColor: 'black',
+          borderBottomWidth: StyleSheet.hairlineWidth,
+        }}
+      />
+      <View>
+        <View style={{marginTop: 5}}>
+          <FlatList
+            data={people.data}
+            renderItem={item => <PeopleItem data={item} />}
+            keyExtractor={item => item.id.toString()}
+          />
+        </View>
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -20,7 +123,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   no: {flex: 1, fontSize: 20, alignItems: 'center', justifyContent: 'center'},
-  yes: {},
 });
 
 export default RidingTaxiPage;

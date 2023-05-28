@@ -8,8 +8,16 @@ const Stack = createNativeStackNavigator();
 function RidingStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="RidingTaxi" component={RidingTaxiPage} />
-      <Stack.Screen name="DutchPay" component={DutchPayPage} />
+      <Stack.Screen
+        name="RidingTaxi"
+        component={RidingTaxiPage}
+        options={{title: '참여중인 팟'}}
+      />
+      <Stack.Screen
+        name="DutchPay"
+        component={DutchPayPage}
+        options={{title: '정산하기'}}
+      />
     </Stack.Navigator>
   );
 }
