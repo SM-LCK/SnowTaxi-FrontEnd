@@ -1,12 +1,34 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, SafeAreaView, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  FlatList,
+  Alert,
+} from 'react-native';
 import {BlueButton, OrButton} from '../components/MyButtons';
 import PeopleItem from '../components/PeopleItem';
 import people from '../people.json';
 
-//ridingTime,from,방장+참여자들 정보(이름,전화번호,전화걸기,문자하기)
+//방장+참여자들 정보(이름,전화번호,전화걸기,문자하기)
 function RidingTaxiPage({route, navigation}) {
-  const {state, from, ridingTime} = route.params; //{"from":"숙대입구","ridingTime":"오전 10:40"}}
+  const {from, ridingTime} = route.params; //PotListItem에서 from, ridingTime가져옴
+  const pressOrBtn = () => {
+    Alert.alert('나가시겠습니까?', '', [
+      {
+        text: '아니오',
+        onPress: () => {
+          //
+        },
+        style: 'cancel',
+      },
+      {
+        text: '네',
+        onPress: () => navigation.goBack(),
+      },
+    ]);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -32,22 +54,22 @@ function RidingTaxiPage({route, navigation}) {
             alignItems: 'flex-end',
             marginRight: 15,
           }}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
             <Text
               style={{
                 fontSize: 18,
-                //fontWeight: 'bold',
-                //marginTop: 10,
                 marginVertical: 5,
               }}>
               탑승시간:
             </Text>
             <Text
               style={{
-                //color: '#3D70FF',
                 fontSize: 20,
                 fontWeight: 'bold',
-                //marginTop: 10,
                 marginLeft: 5,
                 marginVertical: 5,
               }}>
@@ -58,14 +80,12 @@ function RidingTaxiPage({route, navigation}) {
             <Text
               style={{
                 fontSize: 18,
-                //fontWeight: 'bold',
                 marginVertical: 5,
               }}>
               출발:
             </Text>
             <Text
               style={{
-                //color: '#3D70FF',
                 fontSize: 20,
                 fontWeight: 'bold',
                 marginVertical: 5,
@@ -88,12 +108,7 @@ function RidingTaxiPage({route, navigation}) {
               onPress={() => navigation.navigate('DutchPay')}
               text="정산하기"
             />
-            <OrButton
-              onPress={() => {
-                navigation.goBack();
-              }}
-              text="나가기"
-            />
+            <OrButton onPress={pressOrBtn} text="나가기" />
           </View>
         </View>
       </View>

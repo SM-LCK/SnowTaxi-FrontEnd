@@ -1,19 +1,15 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, FlatList} from 'react-native';
+import HistoryItem from '../components/HistoryItem';
 
 function MyHistoryPage({navigation}) {
-  return (
-    <View style={styles.container}>
-      <Text>MyHistory</Text>
-    </View>
-  );
+  return <SafeAreaView style={styles.container}></SafeAreaView>;
 }
 
 const styles = StyleSheet.create({
   container: {
+    display: 'flex',
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: 'white',
   },
 });
