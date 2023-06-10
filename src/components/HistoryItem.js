@@ -1,25 +1,16 @@
-import React, {useState} from 'react';
-import {Button, Pressable, StyleSheet, Text, View, Alert} from 'react-native';
+import React from 'react';
+import {SafeAreaView, View, FlatList, StyleSheet, Text} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-function HistoryItem({data}) {
-  //const {from, ridingTime, createdAt, people, state} = data.item;
+//2023.6.10
+//오전 10:30 (ridingTime)
+//숙대입구(departure) -> 숙명여대 후문
+//1600₩ 결제완료 (isPaid)
+
+function HistoryItem() {
   const navigation = useNavigation();
 
-  return (
-    <Pressable style={styles.itemContainer}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}>
-        <View style={{margin: 15}}>
-          <Text style={{fontSize: 18, fontWeight: 500}}></Text>
-        </View>
-      </View>
-    </Pressable>
-  );
+  return <FlatList></FlatList>;
 }
 const styles = StyleSheet.create({
   itemContainer: {

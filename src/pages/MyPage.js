@@ -4,13 +4,15 @@ import {
   Text,
   StyleSheet,
   Image,
-  Dimensions,
   SafeAreaView,
   Pressable,
+  TouchableOpacity,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import CashCard from '../components/CashCard';
 import people from '../people.json';
+import axios from 'axios';
 
 function MyPage({navigation}) {
   //console.warn(final.data);
@@ -22,13 +24,65 @@ function MyPage({navigation}) {
     }
   });
 
+  const logout = () => {
+    Alert.alert('로그아웃 하시겠습니까?', '', [
+      {
+        text: '아니오',
+        onPress: () => {},
+        style: 'cancel',
+      },
+      {
+        text: '네',
+        onPress: () => {
+          axios
+            .get('http://localhost:9090/user/logout')
+            .then(response => {
+              console.log('로그아웃 성공', response.data);
+            })
+            .catch(error => {
+              console.error('로그아웃 실패:', error);
+            });
+        },
+      },
+    ]);
+  };
+
+  const secession = () => {
+    Alert.alert('탈퇴 하시겠습니까?', '', [
+      {
+        text: '아니오',
+        onPress: () => {},
+        style: 'cancel',
+      },
+      {
+        text: '네',
+        onPress: () => {
+          axios
+            .delete('http://localhost:9090/user/unlink')
+            .then(response => {
+              console.log('탈퇴 성공', response.data);
+            })
+            .catch(error => {
+              console.error('탈퇴 실패:', error);
+            });
+        },
+      },
+    ]);
+  };
+
   const {name, phone, cash} = myUser;
   // const windowWidth = Dimensions.get('window').width;
   // const windowHeight = Dimensions.get('window').height;
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.myInfo}>
-        <Text style={{fontSize: 18, fontWeight: 'bold', margin: 10}}>
+      <View style={{}}>
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: 'bold',
+            marginHorizontal: 10,
+            marginVertical: 10,
+          }}>
           나의 정보
         </Text>
         <View style={styles.myInfo.profile}>
@@ -49,8 +103,14 @@ function MyPage({navigation}) {
         }}
       />
 
-      <View style={styles.myCash}>
-        <Text style={{fontSize: 18, fontWeight: 'bold', margin: 10}}>
+      <View style={{}}>
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: 'bold',
+            marginHorizontal: 10,
+            marginVertical: 15,
+          }}>
           나의 캐시
         </Text>
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
@@ -61,22 +121,31 @@ function MyPage({navigation}) {
         style={{
           borderBottomColor: 'black',
           borderBottomWidth: StyleSheet.hairlineWidth,
+          marginTop: 30,
         }}
       />
 
-      <View style={styles.myArrow}>
+      <View style={{}}>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <Text style={{fontSize: 18, fontWeight: 'bold', margin: 10}}>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: 'bold',
+              marginVertical: 15,
+              marginHorizontal: 10,
+            }}>
             참여 내역
           </Text>
-          <Pressable onPress={() => navigation.navigate('MyHistory')}>
-            <Icon name="right" size={18} />
-          </Pressable>
+          <View style={{margin: 10}}>
+            <Pressable onPress={() => navigation.navigate('MyHistory')}>
+              <Icon name="right" size={18} />
+            </Pressable>
+          </View>
         </View>
         <View
           style={{
@@ -90,10 +159,20 @@ function MyPage({navigation}) {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <Text style={{fontSize: 18, fontWeight: 'bold', margin: 10}}>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: 'bold',
+              marginVertical: 15,
+              marginHorizontal: 10,
+            }}>
             로그아웃
           </Text>
-          <Icon name="right" size={18} />
+          <View style={{margin: 10}}>
+            <Pressable onPress={logout}>
+              <Icon name="right" size={18} />
+            </Pressable>
+          </View>
         </View>
         <View
           style={{
@@ -107,10 +186,20 @@ function MyPage({navigation}) {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <Text style={{fontSize: 18, fontWeight: 'bold', margin: 10}}>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: 'bold',
+              marginVertical: 15,
+              marginHorizontal: 10,
+            }}>
             회원 탈퇴
           </Text>
-          <Icon name="right" size={18} />
+          <View style={{margin: 10}}>
+            <Pressable onPress={secession}>
+              <Icon name="right" size={18} />
+            </Pressable>
+          </View>
         </View>
       </View>
     </SafeAreaView>
@@ -124,8 +213,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   myInfo: {
-    flexGrow: 1,
-    flex: 1,
     profile: {
       flexDirection: 'row',
       marginTop: 10,
@@ -138,14 +225,7 @@ const styles = StyleSheet.create({
       },
     },
   },
-  myCash: {
-    flexGrow: 2,
-    flex: 2,
-  },
-  myArrow: {
-    flexGrow: 1,
-    flex: 3,
-  },
+
   myText: {
     fontSize: 20,
     fontWeight: 'bold',

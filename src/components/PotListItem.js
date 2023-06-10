@@ -12,9 +12,7 @@ function PotListItem({data}) {
     Alert.alert('참여하시겠습니까?', '', [
       {
         text: '아니오',
-        onPress: () => {
-          //navigation.goBack();
-        },
+        onPress: () => {},
         style: 'cancel',
       },
       {

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import pot from '../pot.json';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {CreateButton} from '../components/MyButtons';
+import {color} from 'react-native-reanimated';
 
 function TaxiPotListPage({route, navigation}) {
   const {id} = route.params;
@@ -45,9 +46,10 @@ function TaxiPotListPage({route, navigation}) {
     setDatePickerVisibility(false);
   };
 
+  const nextId = useRef(300);
   const handleConfirm = time => {
     const newData = {
-      id: '',
+      id: nextId.current,
       from: id,
       ridingTime: time.toLocaleTimeString().slice(0, -3),
       createdAt: '',
@@ -56,12 +58,9 @@ function TaxiPotListPage({route, navigation}) {
       date: todays,
     };
     setHereData([...hereData, newData]);
-    hideDatePicker();
+    (nextId.current += 1), hideDatePicker();
+    console.log(ridingTime);
   };
-
-  // const goBack = () => {
-  //   navigation.goBack();
-  // };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -124,7 +123,9 @@ function TaxiPotListPage({route, navigation}) {
         ) : (
           <FlatList
             data={hereData}
-            renderItem={({item}) => <PotListItem data={item} key={item.id} />}
+            renderItem={({item}) => (
+              <PotListItem data={item} key={item.id.toString()} />
+            )}
             keyExtractor={item => item.id.toString()}
           />
         )}
