@@ -1,37 +1,65 @@
 import axios from 'axios';
-import React, {useState} from 'react';
-import {TextInput, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  TextInput,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function SignUp({navigation}) {
+function SignUp({route, navigation}) {
+  const {id} = route.params;
   const [phone, setPhone] = useState('');
-  const [submittedText, setSubmittedText] = useState('');
 
-  const url = 'http://localhost:9090/user/signUp'; // 요청을 보낼 URL
-
-  const onChangeText = text => {
-    setPhone(text);
+  const storeData = async value => {
+    try {
+      await AsyncStorage.setItem('@token', value);
+    } catch (e) {
+      // saving error
+      console.log('storeData err', e);
+    }
   };
 
-  // 입력 값 처리를 수행하는 함수
-  const onSubmitEditing = () => {
-    setSubmittedText(phone); // 입력 값을 submittedText에 저장
-    console.log('입력 값:', phone);
-
-    const requestUrl = `${url}?phone=${phone}`; // 전화번호를 쿼리 매개변수로 추가
-    axios
-      .post(requestUrl, null, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+  // 입력 값 처리 수행하는 함수
+  const handleSubmit = () => {
+    console.log(phone, id);
+    axios({
+      method: 'post',
+      url: 'http://localhost:9090/user/signUp',
+      data: {
+        kakao_token: id,
+        phone: phone,
+      },
+    })
       .then(response => {
-        // 성공적인 응답을 처리합니다.
-        console.log(response.data);
-        navigation.navigate('MainTab', {screen: 'TaxiRouteList'});
+        console.log('success', response.data);
+        try {
+          axios({
+            method: 'post',
+            url: 'http://localhost:9090/user/auth',
+            data: {kakao_token: returnToken},
+          }).then(response => {
+            const value = response.headers.get('Authorization');
+            //console.log(response.headers.get('Authorization'));
+
+            //asyncstorage
+            storeData(value);
+
+            //alert
+            Alert.alert('회원가입 성공!', '');
+            navigation.navigate('MainTab', {screen: 'TaxiRouteList'});
+          });
+        } catch (error) {
+          console.log('authorization err', err);
+        }
       })
       .catch(error => {
-        // 에러를 처리합니다.
-        console.error(error);
+        console.log('err:', error);
+        console.log('[SignUp] store@token', value);
       });
   };
 
@@ -55,9 +83,12 @@ function SignUp({navigation}) {
           placeholder="전화번호를 입력하세요."
           keyboardType="phone-pad"
           value={phone}
-          onChangeText={onChangeText}
-          onSubmitEditing={onSubmitEditing}
+          onChangeText={text => setPhone(text)}
+          onSubmitEditing={handleSubmit}
         />
+        <TouchableOpacity style={styles.blueContainer} onPress={handleSubmit}>
+          <Text style={{color: '#fff', fontSize: 15}}>가입하기</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -77,6 +108,15 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     marginBottom: 10,
     paddingHorizontal: 10,
+  },
+  blueContainer: {
+    alignItems: 'center',
+    backgroundColor: '#3D70FF',
+    borderRadius: 10,
+    height: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 80,
   },
 });
 

@@ -9,66 +9,179 @@ import {
   Alert,
 } from 'react-native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function LoginPage({navigation}) {
   const [webViewVisible, setWebViewVisible] = useState(false);
   const [webViewSource, setWebViewSource] = useState(''); //웹뷰의 소스 URI 저장변수
 
   const handleLogin = () => {
-    axios
-      .get('http://localhost:9090/user/login')
-      .then(response => {
-        console.log('user/login 콘솔', response.data);
-        setWebViewSource(response.data);
-        setWebViewVisible(true);
+    setWebViewSource(
+      'https://kauth.kakao.com/oauth/authorize?client_id=60968cb46ee97afe3cb98d0b6cac5aa5&redirect_uri=http://localhost:9090/user/kakao&response_type=code',
+    );
+    setWebViewVisible(true);
+  };
+
+  function LogInProgress(data) {
+    // access code는 url에 붙어 장황하게 날아온다.
+    // substring으로 url에서 code=뒤를 substring하면 된다.
+    const exp = 'code=';
+    var condition = data.indexOf(exp);
+    if (condition != -1) {
+      var request_code = data.substring(condition + exp.length);
+      console.log('인가코드: ' + request_code);
+      // 토큰값 받기
+      requestToken(request_code);
+    }
+  }
+
+  const requestToken = async request_code => {
+    var returnValue = 'none';
+    var request_token_url = 'https://kauth.kakao.com/oauth/token';
+
+    axios({
+      method: 'post',
+      url: request_token_url,
+      headers: {
+        'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+      },
+      params: {
+        grant_type: 'authorization_code',
+        client_id: '60968cb46ee97afe3cb98d0b6cac5aa5',
+        redirect_uri: 'http://localhost:9090/user/kakao',
+        code: request_code, //인가코드 서버에 보내기
+      },
+    })
+      .then(function (response) {
+        returnToken = response.data.access_token;
+        console.log('사람토큰: ' + returnToken); //사람토큰
+        //storeData(returnToken);
+        gettokenAsync(returnToken);
       })
       .catch(error => {
-        console.error('로그인 실패:', error);
+        console.log(error);
       });
   };
 
-  const onMessage = e => {
-    console.log('data', e.nativeEvent.data); //WebView에서 수신한 메세지? (JSON형식)
-    console.log('url', e.nativeEvent.url);
-    const data = e.nativeEvent.url;
-    getCode(data);
-    //handleLoginComplete(); // 메시지 수신 후 로그인 완료 처리
+  const storeData = async value => {
+    try {
+      await AsyncStorage.setItem('@token', value);
+      console.log('[Login] store@token', value);
+    } catch (e) {
+      // saving error
+      console.log('storeData err', e);
+    }
   };
 
-  const getCode = target => {
-    const exp = 'code=';
-    const condition = target.indexOf(exp);
-    if (condition !== -1) {
-      //setRequestCode(target.substring(condition + exp.length));
-      const requestCode = target.substring(condition + exp.length);
-
-      //if (requestCode != null) {
-      axios
-        .get('http://localhost:9090/user/validation')
+  const gettokenAsync = returnToken => {
+    let stringData = '';
+    try {
+      axios({
+        method: 'post',
+        url: 'http://localhost:9090/user/isUser',
+        data: {kakao_token: returnToken},
+      })
         .then(response => {
-          console.log('user/validation 콘솔', response.data);
-          if (response.data == 'Main') {
-            navigation.navigate('MainTab', {screen: 'TaxiRouteList'});
+          //console.log('response data1', response.data);
+          stringData = response.data;
+
+          if (stringData == 'SignUp') {
+            navigation.navigate(stringData, {id: returnToken});
           } else {
-            navigation.navigate(response.data); //Signup
+            try {
+              axios({
+                method: 'post',
+                url: 'http://localhost:9090/user/auth',
+                data: {kakao_token: returnToken},
+              })
+                .then(response => {
+                  // console.log(response.headers.get('Authorization'));
+                  const value = response.headers.get('Authorization');
+                  //asyncstorage
+                  storeData(value);
+                })
+                .catch(error => {
+                  console.log('auth err', error);
+                });
+
+              navigation.navigate('MainTab', {screen: 'TaxiRouteList'});
+            } catch (err) {
+              console.log('gettoken >>', err);
+            }
           }
         })
-        .catch(error => {
-          console.error(' 실패:', error);
+        .catch(err => {
+          console.log(err);
         });
 
-      console.log('requestCode', requestCode);
+      console.log('dd', stringData);
+    } catch (err) {
+      console.log('gettoekn >>', err);
     }
   };
 
-  const handleLoginComplete = () => {
-    if (requestCode != null) {
-      navigation.navigate('MainTab', {screen: 'TaxiRouteList'});
-    } else {
-      navigation.navigate('SignUp');
+  /*
+  const Auth = () => {
+    try {
+      axios({
+        method: 'post',
+        url: 'http://localhost:9090/user/auth',
+        data: {kakao_token: returnToken},
+      }).then(response => {
+        console.log(response.headers.get('Authorization'));
+      });
+    } catch (error) {
+      console.log('auth err', error);
     }
   };
 
+*/
+  /*
+  try {
+    axios({
+      method: 'get',
+      url: 'http://localhost:9090/user/isUser',
+      // headers: {
+      //   Authorization: `Bearer ${returnToken}`,
+      // },
+      data: {kakao_token: returnToken},
+    }).then(response => {
+      console.log(response.data);
+      if (response.data === 'SignUp') {
+        navigation.navigate(response.data, {id: returnToken});
+      } else {
+        //Auth();
+        navigation.navigate('MainTab', {screen: 'TaxiRouteList'});
+      }
+    });
+  }catch (error) {
+    console.log('authorizaiton err', err);
+  }
+
+*/
+
+  /*
+  const storeData = async returnValue => {
+    try {
+      await AsyncStorage.setItem('userAccessToken', returnValue);
+      console.log('userAccessToken', returnValue);
+    } catch (e) {
+      // saving error
+      console.log('storeData');
+    }
+  };
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('userAccessToken');
+      if (value !== null) {
+        // value previously stored
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+*/
   const INJECTED_JS = `window.ReactNativeWebView.postMessage('message from WEB')`;
 
   return (
@@ -76,9 +189,14 @@ function LoginPage({navigation}) {
       {webViewVisible ? (
         <WebView
           style={styles.webview}
-          source={{uri: webViewSource}}
-          onMessage={onMessage}
+          source={{
+            uri: webViewSource,
+          }}
+          onMessage={e => {
+            LogInProgress(e.nativeEvent['url']);
+          }}
           injectedJavaScript={INJECTED_JS} //WebView->RN으로 메세지 전달
+          javaScriptEnabled={true}
         />
       ) : (
         <View style={styles.container}>
