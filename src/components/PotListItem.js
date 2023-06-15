@@ -7,7 +7,7 @@ import {BlueButton} from './MyButtons';
 function PotListItem({data}) {
   const {potlistId, departure, ridingTime, headCount, createAt, paidRequest} =
     data;
-  console.log('potlist', data);
+  //console.log('potlist', data);
   // const {date, from, ridingTime, createdAt, people, state} = data;
   const navigation = useNavigation();
 
