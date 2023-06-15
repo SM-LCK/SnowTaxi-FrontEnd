@@ -1,0 +1,10 @@
+[
+  {
+    "potlistId": 1,
+    "departure": "효창공원앞",
+    "ridingTime": "10시",
+    "headCount": 2,
+    "createdAt": "2023-06-15",
+    "paidRequest": false
+  }
+]

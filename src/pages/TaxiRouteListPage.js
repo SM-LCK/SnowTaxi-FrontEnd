@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,8 +8,36 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 function TaxiRouteListPage({navigation}) {
+  /*
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@token');
+      if (value != null) {
+        //console.log(value);
+        try {
+          axios({
+            method: 'get',
+            url: 'http://localhost:9090/user/login',
+            headers: {
+              Authorization: `Bearer ${value}`,
+            },
+          }).then(response => {
+            console.log('res', response.data);
+          });
+        } catch (error) {
+          console.log('test err', error);
+        }
+      }
+    } catch (e) {
+      console.log('getData', e);
+    }
+  };
+*/
+
   return (
     <View style={styles.container}>
       <View style={styles.text}>

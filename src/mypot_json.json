@@ -1,0 +1,23 @@
+{
+  "potlist": {
+    "potlistId": 1,
+    "departure": "숙대입구",
+    "ridingTime": "10시",
+    "headCount": 2,
+    "hostUserId": 1,
+    "createdAt": "2023-06-15",
+    "paidRequest": false
+  },
+  "members": [
+    {
+      "nickname": "이가은",
+      "phone": "1234",
+      "paid": false
+    },
+    {
+      "nickname": "최수연",
+      "phone": "1234",
+      "paid": false
+    }
+  ]
+}

@@ -5,18 +5,108 @@ import {
   StyleSheet,
   FlatList,
   Image,
-  Pressable,
   SafeAreaView,
+  RefreshControl,
 } from 'react-native';
 import PotListItem from '../components/PotListItem';
-import pot from '../pot.json';
+//import pot from '../pot.json';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {CreateButton} from '../components/MyButtons';
-import {color} from 'react-native-reanimated';
+import pot from '../potlist_json.json';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function TaxiPotListPage({route, navigation}) {
   const {id} = route.params;
+
+  const [hereData, setHereData] = useState([]);
+
+  const [posting, setPosting] = useState(0);
+  const [ridingTime, setRidingTime] = useState('');
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@token');
+      if (value != null) {
+        try {
+          const requestUrl = `http://localhost:9090/potlist/${id}`;
+          axios({
+            method: 'get',
+            url: requestUrl,
+            headers: {
+              Authorization: `Bearer ${value}`,
+            },
+          }).then(response => {
+            setHereData(response.data);
+            console.log('res', response.data);
+          });
+        } catch (error) {
+          console.log('test err', error);
+        }
+      }
+    } catch (e) {
+      console.log('getData', e);
+    }
+  };
+
+  const handleConfirm = async time => {
+    setRidingTime(time.toLocaleTimeString().slice(0, -3));
+    postData();
+
+    hideDatePicker();
+  };
+
+  const postData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@token');
+      if (value != null) {
+        try {
+          const requestUrl = `http://localhost:9090/potlist/${id}/create?ridingTime=${ridingTime}`;
+          axios({
+            method: 'post',
+            url: requestUrl,
+            headers: {
+              Authorization: `Bearer ${value}`,
+            },
+          }).then(response => {
+            getData();
+            console.log('post data');
+          });
+        } catch (error) {
+          console.log('handle err', error);
+        }
+      }
+    } catch (e) {
+      console.log('postData', e);
+    }
+  };
+
+  // const newData = {
+  //   departure: id,
+  //   ridingTime: time.toLocaleTimeString().slice(0, -3),
+  // };
+  //localhost:9090/potlist/숙대입구/create?ridingTime=10시
+  //axios.post
+
+  /*
+        const newData = {
+      id: nextId.current,
+      from: id,
+      ridingTime: time.toLocaleTimeString().slice(0, -3),
+      createdAt: '',
+      state: '참여중',
+      people: 1,
+      date: todays,
+    };
+    setHereData([...hereData, newData]);
+    (nextId.current += 1), hideDatePicker();
+    console.log(ridingTime);
+     */
 
   const currentdate = new Date();
   const year = currentdate.getFullYear();
@@ -32,10 +122,6 @@ function TaxiPotListPage({route, navigation}) {
   const today = `${year}.${month}.${date} ${day}`;
   const todays = `${year}.${month}.${date}`;
 
-  const [hereData, setHereData] = useState(
-    pot.data.filter(data => data.from === id && data.date === todays),
-  );
-
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
@@ -44,22 +130,6 @@ function TaxiPotListPage({route, navigation}) {
 
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
-  };
-
-  const nextId = useRef(300);
-  const handleConfirm = time => {
-    const newData = {
-      id: nextId.current,
-      from: id,
-      ridingTime: time.toLocaleTimeString().slice(0, -3),
-      createdAt: '',
-      state: '참여중',
-      people: 1,
-      date: todays,
-    };
-    setHereData([...hereData, newData]);
-    (nextId.current += 1), hideDatePicker();
-    console.log(ridingTime);
   };
 
   return (
@@ -123,10 +193,8 @@ function TaxiPotListPage({route, navigation}) {
         ) : (
           <FlatList
             data={hereData}
-            renderItem={({item}) => (
-              <PotListItem data={item} key={item.id.toString()} />
-            )}
-            keyExtractor={item => item.id.toString()}
+            renderItem={({item}) => <PotListItem data={item} />}
+            keyExtractor={item => item.potlistId}
           />
         )}
       </View>
