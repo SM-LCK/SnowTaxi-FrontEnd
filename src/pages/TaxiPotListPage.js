@@ -21,10 +21,6 @@ function TaxiPotListPage({route, navigation}) {
   const {id} = route.params;
 
   const [hereData, setHereData] = useState([]);
-
-  const [posting, setPosting] = useState(0);
-  const [ridingTime, setRidingTime] = useState('');
-
   useEffect(() => {
     getData();
   }, []);
@@ -55,13 +51,16 @@ function TaxiPotListPage({route, navigation}) {
   };
 
   const handleConfirm = async time => {
-    setRidingTime(time.toLocaleTimeString().slice(0, -3));
-    postData();
-
+    const ridingTime = time.toLocaleTimeString().slice(0, -3);
+    await postData(ridingTime);
+    // setRidingTime(time.toLocaleTimeString().slice(0, -3));
+    // if (ridingTime != '') {
+    //   postData();
+    // }
     hideDatePicker();
   };
 
-  const postData = async () => {
+  const postData = async ridingTime => {
     try {
       const value = await AsyncStorage.getItem('@token');
       if (value != null) {
@@ -85,28 +84,6 @@ function TaxiPotListPage({route, navigation}) {
       console.log('postData', e);
     }
   };
-
-  // const newData = {
-  //   departure: id,
-  //   ridingTime: time.toLocaleTimeString().slice(0, -3),
-  // };
-  //localhost:9090/potlist/숙대입구/create?ridingTime=10시
-  //axios.post
-
-  /*
-        const newData = {
-      id: nextId.current,
-      from: id,
-      ridingTime: time.toLocaleTimeString().slice(0, -3),
-      createdAt: '',
-      state: '참여중',
-      people: 1,
-      date: todays,
-    };
-    setHereData([...hereData, newData]);
-    (nextId.current += 1), hideDatePicker();
-    console.log(ridingTime);
-     */
 
   const currentdate = new Date();
   const year = currentdate.getFullYear();
