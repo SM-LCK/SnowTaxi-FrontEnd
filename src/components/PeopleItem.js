@@ -10,8 +10,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 
 function PeopleItem({data}) {
-  // {id: 1, phone: '010-0000-0000', profile: '../assets/profile.png', name: '최수연', cash: 10000},
-  const {phone, profile, name, captain} = data.item;
+  const {nickname, paid, phone} = data.item;
   const navigation = useNavigation();
   //<Button onPress={{Linking.openURL(`tel:01012341234`)}} />
   {
@@ -44,15 +43,7 @@ function PeopleItem({data}) {
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
-              {captain > 0 ? (
-                <>
-                  <Text style={{fontWeight: 'bold', fontSize: 15}}>
-                    👑 {name}
-                  </Text>
-                </>
-              ) : (
-                <Text style={{fontWeight: 'bold', fontSize: 15}}>{name}</Text>
-              )}
+              <Text style={{fontWeight: 'bold', fontSize: 15}}>{nickname}</Text>
             </View>
             <Text style={{marginTop: 5}}>{phone}</Text>
           </View>

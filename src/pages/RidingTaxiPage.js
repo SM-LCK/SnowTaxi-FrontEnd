@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -10,10 +10,51 @@ import {
 import {BlueButton, OrButton} from '../components/MyButtons';
 import PeopleItem from '../components/PeopleItem';
 import people from '../people.json';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //방장+참여자들 정보(이름,전화번호,전화걸기,문자하기)
-function RidingTaxiPage({route, navigation}) {
-  const {from, ridingTime} = route.params; //PotListItem에서 from, ridingTime가져옴
+function RidingTaxiPage({navigation}) {
+  const [hereData, setHereData] = useState([]);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@token');
+      if (value != null) {
+        try {
+          const requestUrl = `http://localhost:9090/participation/mypot`;
+          axios({
+            method: 'get',
+            url: requestUrl,
+            headers: {
+              Authorization: `Bearer ${value}`,
+            },
+          }).then(response => {
+            console.log('res >>', response.data);
+            setHereData(response.data);
+
+            //const keys = Object.keys(jsonHere);
+            // const values = Object.values(jsonHere);
+            //setPotData(values[0]);
+            // setMemberData(values[1]);
+            console.log('here', response.data);
+            console.log('here >> ', response.data.potlist.ridingTime);
+            console.log('here >> ', response.data.potlist.departure);
+          });
+        } catch (error) {
+          console.log('test err', error);
+        }
+      }
+    } catch (e) {
+      console.log('getData', e);
+    }
+  };
+
+  // const {from, ridingTime} = route.params; //PotListItem에서 from, ridingTime가져옴
   const pressOrBtn = () => {
     Alert.alert('나가시겠습니까?', '', [
       {
@@ -73,7 +114,7 @@ function RidingTaxiPage({route, navigation}) {
                 marginLeft: 5,
                 marginVertical: 5,
               }}>
-              {ridingTime}
+              {hereData.potlist.ridingTime}
             </Text>
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -91,7 +132,7 @@ function RidingTaxiPage({route, navigation}) {
                 marginVertical: 5,
                 marginLeft: 5,
               }}>
-              {from}
+              {hereData.potlist.departure}
             </Text>
           </View>
 
@@ -122,9 +163,9 @@ function RidingTaxiPage({route, navigation}) {
       <View>
         <View style={{marginTop: 5}}>
           <FlatList
-            data={people.data}
+            data={hereData.members}
             renderItem={item => <PeopleItem data={item} />}
-            keyExtractor={item => item.id.toString()}
+            //keyExtractor={item => item.id.toString()}
           />
         </View>
       </View>

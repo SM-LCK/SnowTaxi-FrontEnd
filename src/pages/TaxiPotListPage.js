@@ -39,7 +39,7 @@ function TaxiPotListPage({route, navigation}) {
             },
           }).then(response => {
             setHereData(response.data);
-            console.log('res', response.data);
+            // console.log('res', response.data);
           });
         } catch (error) {
           console.log('test err', error);
@@ -170,7 +170,9 @@ function TaxiPotListPage({route, navigation}) {
         ) : (
           <FlatList
             data={hereData}
-            renderItem={({item}) => <PotListItem data={item} />}
+            renderItem={({item}) => (
+              <PotListItem data={item} key={item.potlistId} />
+            )}
             keyExtractor={item => item.potlistId}
           />
         )}
