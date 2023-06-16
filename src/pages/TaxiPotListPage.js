@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, Text, StyleSheet, Image, SafeAreaView} from 'react-native';
+import {View, Text, StyleSheet, Image, SafeAreaView, Alert} from 'react-native';
 import PotListItem from '../components/PotListItem';
 //import pot from '../pot.json';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -71,6 +71,9 @@ function TaxiPotListPage({route, navigation}) {
               Authorization: `Bearer ${value}`,
             },
           }).then(response => {
+            if (response.data == 'fail') {
+                Alert.alert('이미 참여 중인 팟이 있습니다.', '')
+            }
             getData();
             console.log('post data');
           });

@@ -13,22 +13,30 @@ function MyCashChargePage({route, navigation}) {
   const {cash} = route.params;
   const [text, onChangeText] = useState('');
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     try {
-      axios({
-        method: 'post',
-        url: `http://localhost:9090/charge?amount=${text}`,
-        data: {kakao_token: returnToken},
-      }).then(response => {
-        const value = response.headers.get('Authorization');
-        storeData(value);
-        navigation.goBack();
-        console.log('cash success >> ', response);
-      });
-    } catch (error) {
-      console.log(error);
+      const value = await AsyncStorage.getItem('@token');
+      if (value != null) {
+        try {
+          const requestUrl = `http://localhost:9090/cash/charge?amount=${text}`;
+          axios({
+            method: 'post',
+            url: requestUrl,
+            headers: {
+              Authorization: `Bearer ${value}`,
+            },
+          }).then(response => {
+            navigation.goBack()
+          });
+        } catch (error) {
+          console.log('handle err', error);
+        }
+      }
+    } catch (e) {
+      console.log('postData', e);
     }
   };
+
 
   return (
     <View style={styles.container}>
