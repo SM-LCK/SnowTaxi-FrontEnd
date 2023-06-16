@@ -1,19 +1,12 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  SafeAreaView,
-  RefreshControl,
-} from 'react-native';
+import {View, Text, StyleSheet, Image, SafeAreaView} from 'react-native';
 import PotListItem from '../components/PotListItem';
 //import pot from '../pot.json';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {CreateButton} from '../components/MyButtons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import {useIsFocused} from '@react-navigation/native';
 
 function TaxiPotListPage({route, navigation}) {
@@ -177,7 +170,11 @@ function TaxiPotListPage({route, navigation}) {
           <ScrollView>
             <View>
               {hereData.map((potInfo, index) => (
-                <PotListItem data={potInfo} isParticipating={isParticipating} key={index} />
+                <PotListItem
+                  data={potInfo}
+                  isParticipating={isParticipating}
+                  key={index}
+                />
               ))}
             </View>
           </ScrollView>
