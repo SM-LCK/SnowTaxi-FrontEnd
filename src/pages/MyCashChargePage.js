@@ -1,4 +1,3 @@
-import {padding} from '@mui/system';
 import React, {useState} from 'react';
 import {
   View,
@@ -7,10 +6,29 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function MyCashChargePage({route, navigation}) {
   const {cash} = route.params;
   const [text, onChangeText] = useState('');
+
+  const handleSubmit = () => {
+    try {
+      axios({
+        method: 'post',
+        url: `http://localhost:9090/charge?amount=${text}`,
+        data: {kakao_token: returnToken},
+      }).then(response => {
+        const value = response.headers.get('Authorization');
+        storeData(value);
+        navigation.goBack();
+        console.log('cash success >> ', response);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -25,11 +43,13 @@ function MyCashChargePage({route, navigation}) {
           backgroundColor: '#F8F8F8',
           padding: 10,
         }}
-        onChangeText={onChangeText}
+        onChangeText={text => onChangeText(text)}
         value={text}
         placeholder="원하는 ₩만큼 입력하세요"
         keyboardType="numeric"
+        onSubmitEditing={handleSubmit}
       />
+
       <TouchableOpacity
         style={{
           alignItems: 'center',
@@ -40,7 +60,7 @@ function MyCashChargePage({route, navigation}) {
           alignItems: 'center',
           width: 120,
         }}
-        onPress={() => {}}>
+        onPress={handleSubmit}>
         <Text style={{color: '#fff', fontSize: 15}}>충전하기</Text>
       </TouchableOpacity>
     </View>

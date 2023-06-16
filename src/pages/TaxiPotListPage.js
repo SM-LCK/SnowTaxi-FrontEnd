@@ -14,16 +14,19 @@ import {CreateButton} from '../components/MyButtons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
+import {useIsFocused} from '@react-navigation/native';
 
 function TaxiPotListPage({route, navigation}) {
   const {id} = route.params;
+
+  const isFocused = useIsFocused();
 
   const [hereData, setHereData] = useState([]);
   const [isParticipating, setIsParticipating] = useState(true);
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [isFocused]);
 
   const getData = async () => {
     try {

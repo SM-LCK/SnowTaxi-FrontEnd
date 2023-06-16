@@ -10,16 +10,19 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useIsFocused} from '@react-navigation/native';
 
 function LoginPage({navigation}) {
   const [webViewVisible, setWebViewVisible] = useState(false);
   const [webViewSource, setWebViewSource] = useState(''); //웹뷰의 소스 URI 저장변수
 
+  const isFocused = useIsFocused();
+
   const handleLogin = () => {
+    setWebViewVisible(true);
     setWebViewSource(
       'https://kauth.kakao.com/oauth/authorize?client_id=60968cb46ee97afe3cb98d0b6cac5aa5&redirect_uri=http://localhost:9090/user/kakao&response_type=code',
     );
-    setWebViewVisible(true);
   };
 
   function LogInProgress(data) {
@@ -29,7 +32,7 @@ function LoginPage({navigation}) {
     var condition = data.indexOf(exp);
     if (condition != -1) {
       var request_code = data.substring(condition + exp.length);
-      console.log('인가코드: ' + request_code);
+      //  console.log('인가코드: ' + request_code);
       // 토큰값 받기
       requestToken(request_code);
     }
@@ -54,7 +57,7 @@ function LoginPage({navigation}) {
     })
       .then(function (response) {
         returnToken = response.data.access_token;
-        console.log('사람토큰: ' + returnToken); //사람토큰
+        //  console.log('사람토큰: ' + returnToken); //사람토큰
         //storeData(returnToken);
         gettokenAsync(returnToken);
       })
@@ -66,7 +69,7 @@ function LoginPage({navigation}) {
   const storeData = async value => {
     try {
       await AsyncStorage.setItem('@token', value);
-      console.log('[Login] store@token', value);
+      //console.log('[Login] store@token', value);
     } catch (e) {
       // saving error
       console.log('storeData err', e);
@@ -87,6 +90,7 @@ function LoginPage({navigation}) {
 
           if (stringData == 'SignUp') {
             navigation.navigate(stringData, {id: returnToken});
+            setWebViewVisible(false);
           } else {
             try {
               axios({
@@ -101,12 +105,12 @@ function LoginPage({navigation}) {
                   storeData(value);
                 })
                 .catch(error => {
-                  console.log('auth err', error);
+                  console.log(error);
                 });
-
               navigation.navigate('MainTab', {screen: 'TaxiRouteList'});
+              setWebViewVisible(false);
             } catch (err) {
-              console.log('gettoken >>', err);
+              console.log(err);
             }
           }
         })
@@ -114,74 +118,12 @@ function LoginPage({navigation}) {
           console.log(err);
         });
 
-      console.log('dd', stringData);
+      //console.log(stringData);
     } catch (err) {
-      console.log('gettoekn >>', err);
+      console.log(err);
     }
   };
 
-  /*
-  const Auth = () => {
-    try {
-      axios({
-        method: 'post',
-        url: 'http://localhost:9090/user/auth',
-        data: {kakao_token: returnToken},
-      }).then(response => {
-        console.log(response.headers.get('Authorization'));
-      });
-    } catch (error) {
-      console.log('auth err', error);
-    }
-  };
-
-*/
-  /*
-  try {
-    axios({
-      method: 'get',
-      url: 'http://localhost:9090/user/isUser',
-      // headers: {
-      //   Authorization: `Bearer ${returnToken}`,
-      // },
-      data: {kakao_token: returnToken},
-    }).then(response => {
-      console.log(response.data);
-      if (response.data === 'SignUp') {
-        navigation.navigate(response.data, {id: returnToken});
-      } else {
-        //Auth();
-        navigation.navigate('MainTab', {screen: 'TaxiRouteList'});
-      }
-    });
-  }catch (error) {
-    console.log('authorizaiton err', err);
-  }
-
-*/
-
-  /*
-  const storeData = async returnValue => {
-    try {
-      await AsyncStorage.setItem('userAccessToken', returnValue);
-      console.log('userAccessToken', returnValue);
-    } catch (e) {
-      // saving error
-      console.log('storeData');
-    }
-  };
-
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('userAccessToken');
-      if (value !== null) {
-        // value previously stored
-      }
-    } catch (e) {
-      // error reading value
-    }
-  };
-*/
   const INJECTED_JS = `window.ReactNativeWebView.postMessage('message from WEB')`;
 
   return (
