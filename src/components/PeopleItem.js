@@ -7,7 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import {BlueButton, GrayButton} from '../components/MyButtons';
 
 function MeItem({data}) {
-  const {nickname, paid, phone} = data.item;
+  const {nickname, paid, phone} = data;
   const navigation = useNavigation();
 
   return (
@@ -37,7 +37,7 @@ function MeItem({data}) {
         <View style={{marginRight: 5}}>
         { paid ?
             <Text style={{fontSize: 15, color:'#4B4BEF'}}>정산완료</Text> :
-            <Text style={{fontSize: 15, color:'#F07446'}}>미정산</Text>
+            <Text style={{fontSize: 15, color:'#4B4BEF'}}>미정산</Text>
         }
         </View>
       </View>

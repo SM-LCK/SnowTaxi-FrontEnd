@@ -24,6 +24,7 @@ function RidingTaxiPage({navigation}) {
   const [depart, setDepart] = useState('');
   const [me, setMe] = useState([]);
   const [host, setHost] = useState([]);
+  const [members, setMembers] = useState([]);
   const [isHost, setIsHost] = useState(true);
 
   useEffect(() => {
@@ -50,6 +51,7 @@ function RidingTaxiPage({navigation}) {
             setIsHost(response.data.potlist.isHost);
             setMe(response.data.me);
             setHost(response.data.host);
+            setMembers(response.data.members);
             console.log('here', response.data);
             console.log('here >> ', response.data.potlist.ridingTime);
             console.log('here >> ', response.data.potlist.departure);
@@ -178,11 +180,9 @@ function RidingTaxiPage({navigation}) {
         </View>
         }
         <View style={{marginHorizontal: 15}}>
-          <FlatList
-            data={hereData.members}
-            renderItem={item => <PeopleItem data={item} />}
-            //keyExtractor={item => item.id.toString()}
-          />
+          {members.map((user, index) => (
+            <PeopleItem data={user} key={index} />
+          ))}
         </View>
       </ScrollView>
       

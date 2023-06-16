@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Image,
   SafeAreaView,
   RefreshControl,
@@ -11,16 +10,17 @@ import {
 import PotListItem from '../components/PotListItem';
 //import pot from '../pot.json';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import Icon from 'react-native-vector-icons/AntDesign';
 import {CreateButton} from '../components/MyButtons';
-import pot from '../potlist_json.json';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ScrollView } from 'react-native-gesture-handler';
 
 function TaxiPotListPage({route, navigation}) {
   const {id} = route.params;
 
   const [hereData, setHereData] = useState([]);
+  const [isParticipating, setIsParticipating] = useState(true);
+
   useEffect(() => {
     getData();
   }, []);
@@ -38,8 +38,10 @@ function TaxiPotListPage({route, navigation}) {
               Authorization: `Bearer ${value}`,
             },
           }).then(response => {
-            setHereData(response.data);
-            // console.log('res', response.data);
+            console.log('res', response.data.isParticipating);
+            setIsParticipating(response.data.isParticipating);
+            console.log('res', response.data);
+            setHereData(response.data.potList);
           });
         } catch (error) {
           console.log('test err', error);
@@ -132,11 +134,12 @@ function TaxiPotListPage({route, navigation}) {
 
       <View
         style={{
-          marginTop: 10,
-          borderBottomColor: 'black',
+          marginVertical: 15,
+          borderBottomColor: '#A1A1A1',
           borderBottomWidth: StyleSheet.hairlineWidth,
         }}
       />
+
       <View style={styles.second}>
         <Text style={styles.second.today}>{today}</Text>
         <View style={styles.second.desc}>
@@ -168,13 +171,13 @@ function TaxiPotListPage({route, navigation}) {
             <Text style={{fontSize: 15}}>팟을 생성해보세요!</Text>
           </View>
         ) : (
-          <FlatList
-            data={hereData}
-            renderItem={({item}) => (
-              <PotListItem data={item} key={item.potlistId} />
-            )}
-            // keyExtractor={item => item.potlistId}
-          />
+          <ScrollView>
+            <View>
+              {hereData.map((potInfo, index) => (
+                <PotListItem data={potInfo} isParticipating={isParticipating} key={index} />
+              ))}
+            </View>
+          </ScrollView>
         )}
       </View>
     </SafeAreaView>
@@ -200,7 +203,7 @@ const styles = StyleSheet.create({
     flex: 2,
     margin: 15,
     today: {
-      fontSize: 20,
+      fontSize: 25,
       fontWeight: 'bold',
     },
     desc: {
@@ -209,6 +212,7 @@ const styles = StyleSheet.create({
     },
     buttons: {
       alignItems: 'center',
+      marginTop: 25,
       marginLeft: 250,
       marginBottom: 10,
     },
