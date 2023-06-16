@@ -4,6 +4,9 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LoginPage from './src/pages/LoginPage';
 import MainTab from './src/pages/MainTab';
 import SignUp from './src/pages/SignUp';
+import {LogBox} from 'react-native';
+
+LogBox.ignoreAllLogs();
 
 const Stack = createNativeStackNavigator();
 

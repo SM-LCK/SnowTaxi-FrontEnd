@@ -57,7 +57,6 @@ function RidingTaxiPage({navigation}) {
             console.log('here >> ', response.data.potlist.ridingTime);
             console.log('here >> ', response.data.potlist.departure);
             console.log('save', hereData);
-
           });
         } catch (error) {
           console.log('test err', error);
@@ -80,6 +79,7 @@ function RidingTaxiPage({navigation}) {
               Authorization: `Bearer ${value}`,
             },
           }).then(response => {
+            getData();
             onBack();
           });
         } catch (error) {
@@ -111,113 +111,128 @@ function RidingTaxiPage({navigation}) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.yesTop}>
-        <Text style={{fontSize: 18, marginTop: 15, marginLeft: 10}}>
-          탑승 정보
-        </Text>
-
-        <View
-          style={{
-            marginVertical: 10,
-            borderBottomColor: '#A1A1A1',
-            borderBottomWidth: StyleSheet.hairlineWidth,
-          }}
-        />
-
-        <View
-          style={{
-            alignItems: 'flex-end',
-            marginRight: 30,
-            marginTop: 10,
-          }}>
-          <View style={{flexDirection: 'row', alignItems: 'baseline'}}>
-            <Text style={{fontSize: 18, marginVertical: 5}}>탑승시간 :</Text>
-            <Text
-              style={{
-                fontSize: 25,
-                fontWeight: 'bold',
-                marginLeft: 5,
-                marginVertical: 5,
-              }}>
-              {'  ' + time}
+    <>
+      {hereData.length != 0 ? (
+        <View style={styles.container}>
+          <View style={styles.yesTop}>
+            <Text style={{fontSize: 18, marginTop: 15, marginLeft: 10}}>
+              탑승 정보
             </Text>
-          </View>
-          <View style={{flexDirection: 'row', alignItems: 'baseline'}}>
-            <Text style={{fontSize: 18, marginVertical: 5}}>출발 :</Text>
-            <Text
+
+            <View
               style={{
-                fontSize: 25,
-                fontWeight: 'bold',
-                marginLeft: 5,
-                marginVertical: 5,
+                marginVertical: 10,
+                borderBottomColor: '#A1A1A1',
+                borderBottomWidth: StyleSheet.hairlineWidth,
+              }}
+            />
+
+            <View
+              style={{
+                alignItems: 'flex-end',
+                marginRight: 30,
+                marginTop: 10,
               }}>
-              {'  ' + depart}
-            </Text>
+              <View style={{flexDirection: 'row', alignItems: 'baseline'}}>
+                <Text style={{fontSize: 18, marginVertical: 5}}>
+                  탑승시간 :
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 25,
+                    fontWeight: 'bold',
+                    marginLeft: 5,
+                    marginVertical: 5,
+                  }}>
+                  {'  ' + time}
+                </Text>
+              </View>
+              <View style={{flexDirection: 'row', alignItems: 'baseline'}}>
+                <Text style={{fontSize: 18, marginVertical: 5}}>출발 :</Text>
+                <Text
+                  style={{
+                    fontSize: 25,
+                    fontWeight: 'bold',
+                    marginLeft: 5,
+                    marginVertical: 5,
+                  }}>
+                  {'  ' + depart}
+                </Text>
+              </View>
+
+              <Text style={{marginTop: 10, color: '#6A6A6A'}}>
+                도착지는 숙대입구 후문입니다.
+              </Text>
+              <Text style={{marginBottom: 10, color: '#6A6A6A'}}>
+                먼저 내리실 분들은 먼저 내려주세요.
+              </Text>
+
+              <View
+                style={{
+                  marginVertical: 10,
+                  flexDirection: 'row',
+                }}>
+                <OrButton onPress={pressOrBtn} text="나가기" />
+              </View>
+            </View>
           </View>
 
-          <Text style={{marginTop: 10, color: '#6A6A6A'}}>
-            도착지는 숙대입구 후문입니다.
-          </Text>
-          <Text style={{marginBottom: 10, color: '#6A6A6A'}}>
-            먼저 내리실 분들은 먼저 내려주세요.
+          <View
+            style={{
+              marginVertical: 15,
+              borderBottomColor: '#A1A1A1',
+              borderBottomWidth: StyleSheet.hairlineWidth,
+            }}
+          />
+
+          <View style={{marginHorizontal: 15}}>
+            <HostItem data={host} />
+          </View>
+
+          <View
+            style={{
+              marginVertical: 15,
+              borderBottomColor: '#A1A1A1',
+              borderBottomWidth: StyleSheet.hairlineWidth,
+            }}
+          />
+
+          <Text style={{fontSize: 18, marginTop: 5, marginLeft: 10}}>
+            정산 현황
           </Text>
 
           <View
             style={{
-              marginVertical: 10,
-              flexDirection: 'row',
-            }}>
-            <OrButton onPress={pressOrBtn} text="나가기" />
+              marginVertical: 15,
+              borderBottomColor: '#A1A1A1',
+              borderBottomWidth: StyleSheet.hairlineWidth,
+            }}
+          />
+          {{isHost} ? (
+            <></>
+          ) : (
+            <View style={{marginHorizontal: 15}}>
+              <MeItem data={me} />
+            </View>
+          )}
+          <View style={{marginHorizontal: 15}}>
+            {members.map((user, index) => (
+              <PeopleItem data={user} key={index} />
+            ))}
           </View>
         </View>
-      </View>
-
-      <View
-        style={{
-          marginVertical: 15,
-          borderBottomColor: '#A1A1A1',
-          borderBottomWidth: StyleSheet.hairlineWidth,
-        }}
-      />
-
-      <View style={{marginHorizontal: 15}}>
-        <HostItem data={host} />
-      </View>
-
-      <View
-        style={{
-          marginVertical: 15,
-          borderBottomColor: '#A1A1A1',
-          borderBottomWidth: StyleSheet.hairlineWidth,
-        }}
-      />
-
-      <Text style={{fontSize: 18, marginTop: 5, marginLeft: 10}}>
-        정산 현황
-      </Text>
-
-      <View
-        style={{
-          marginVertical: 15,
-          borderBottomColor: '#A1A1A1',
-          borderBottomWidth: StyleSheet.hairlineWidth,
-        }}
-      />
-      {{isHost} ? (
-        <></>
       ) : (
-        <View style={{marginHorizontal: 15}}>
-          <MeItem data={me} />
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'white',
+            flex: 1,
+          }}>
+          <Text style={{fontSize: 15}}>현재 참여중인 팟이 없습니다.</Text>
         </View>
       )}
-      <View style={{marginHorizontal: 15}}>
-          {members.map((user, index) => (
-            <PeopleItem data={user} key={index} />
-          ))}
-      </View>
-
-    </SafeAreaView>
+    </>
   );
 }
 
@@ -226,7 +241,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
-  no: {flex: 1, fontSize: 20, alignItems: 'center', justifyContent: 'center'},
+  no: {flex: 1, alignItems: 'center', justifyContent: 'center'},
 });
 
 export default RidingTaxiPage;
