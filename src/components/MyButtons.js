@@ -16,11 +16,11 @@ function OrButton({onPress, text}) {
     </TouchableOpacity>
   );
 }
-function GrayButton({onPress, text}) {
+function GrayButton({text}) {
   return (
-    <TouchableOpacity style={styles.grayContainer} onPress={onPress}>
+    <View style={styles.grayContainer} >
       <Text style={{color: '#fff', fontSize: 15}}>{text}</Text>
-    </TouchableOpacity>
+    </View>
   );
 }
 
