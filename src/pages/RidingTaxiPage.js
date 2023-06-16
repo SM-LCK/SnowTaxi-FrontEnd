@@ -212,26 +212,11 @@ function RidingTaxiPage({navigation}) {
         </View>
       )}
       <View style={{marginHorizontal: 15}}>
-        <FlatList
-          data={hereData.members}
-          renderItem={item => <PeopleItem data={item} />}
-          keyExtractor={item => item.id.toString()}
-        />
-      </View>
-      {/* <ScrollView>
-        {{isHost} ? (
-          <></>
-        ) : (
-          <View style={{marginHorizontal: 15}}>
-            <MeItem data={me} />
-          </View>
-        )}
-        <View style={{marginHorizontal: 15}}>
           {members.map((user, index) => (
             <PeopleItem data={user} key={index} />
           ))}
-        </View>
-      </ScrollView> */}
+      </View>
+
     </SafeAreaView>
   );
 }
