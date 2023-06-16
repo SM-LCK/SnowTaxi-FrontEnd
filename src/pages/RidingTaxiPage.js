@@ -26,7 +26,6 @@ function RidingTaxiPage({navigation}) {
 
   const [me, setMe] = useState([]);
   const [host, setHost] = useState([]);
-
   const [isHost, setIsHost] = useState(true);
 
   useEffect(() => {
@@ -38,10 +37,9 @@ function RidingTaxiPage({navigation}) {
       const value = await AsyncStorage.getItem('@token');
       if (value != null) {
         try {
-          const requestUrl = `http://localhost:9090/participation/mypot`;
           axios({
             method: 'get',
-            url: requestUrl,
+            url: 'http://localhost:9090/participation/mypot',
             headers: {
               Authorization: `Bearer ${value}`,
             },
@@ -53,11 +51,6 @@ function RidingTaxiPage({navigation}) {
             setIsHost(response.data.potlist.isHost);
             setMe(response.data.me);
             setHost(response.data.host);
-            console.log('here', response.data);
-            console.log('here >> ', response.data.potlist.ridingTime);
-            console.log('here >> ', response.data.potlist.departure);
-
-            console.log('save', hereData);
           });
         } catch (error) {
           console.log('test err', error);
@@ -68,7 +61,32 @@ function RidingTaxiPage({navigation}) {
     }
   };
 
-  // const {from, ridingTime} = route.params; //PotListItem에서 from, ridingTime가져옴
+  const onDelete = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@token');
+      if (value != null) {
+        try {
+          axios({
+            method: 'delete',
+            url: 'http://localhost:9090/participation/delete',
+            headers: {
+              Authorization: `Bearer ${value}`,
+            },
+          }).then(response => {
+            onBack();
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const onBack = () => {
+    navigation.goBack();
+  };
+
   const pressOrBtn = () => {
     Alert.alert('나가시겠습니까?', '', [
       {
@@ -78,7 +96,9 @@ function RidingTaxiPage({navigation}) {
       },
       {
         text: '네',
-        onPress: () => navigation.goBack(),
+        onPress: () => {
+          onDelete();
+        },
       },
     ]);
   };
@@ -177,11 +197,28 @@ function RidingTaxiPage({navigation}) {
           borderBottomWidth: StyleSheet.hairlineWidth,
         }}
       />
-      <ScrollView>
+      {{isHost} ? (
+        <></>
+      ) : (
         <View style={{marginHorizontal: 15}}>
           <MeItem data={me} />
         </View>
-
+      )}
+      <View style={{marginHorizontal: 15}}>
+        <FlatList
+          data={hereData.members}
+          renderItem={item => <PeopleItem data={item} />}
+          keyExtractor={item => item.id.toString()}
+        />
+      </View>
+      {/* <ScrollView>
+        {{isHost} ? (
+          <></>
+        ) : (
+          <View style={{marginHorizontal: 15}}>
+            <MeItem data={me} />
+          </View>
+        )}
         <View style={{marginHorizontal: 15}}>
           <FlatList
             data={hereData.members}
@@ -189,7 +226,7 @@ function RidingTaxiPage({navigation}) {
             //keyExtractor={item => item.id.toString()}
           />
         </View>
-      </ScrollView>
+      </ScrollView> */}
     </SafeAreaView>
   );
 }
