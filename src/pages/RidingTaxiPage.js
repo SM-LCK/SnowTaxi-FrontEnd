@@ -12,10 +12,15 @@ import PeopleItem from '../components/PeopleItem';
 import people from '../people.json';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import uuid from 'react-native-uuid';
 
 //방장+참여자들 정보(이름,전화번호,전화걸기,문자하기)
 function RidingTaxiPage({navigation}) {
   const [hereData, setHereData] = useState([]);
+  const [time, setTime] = useState('');
+  const [depart, setDepart] = useState('');
+  const [me, setme] = useState('');
+  const [isHost, setIsHost] = useState(true);
 
   useEffect(() => {
     getData();
@@ -36,14 +41,11 @@ function RidingTaxiPage({navigation}) {
           }).then(response => {
             console.log('res >>', response.data);
             setHereData(response.data);
-
-            //const keys = Object.keys(jsonHere);
-            // const values = Object.values(jsonHere);
-            //setPotData(values[0]);
-            // setMemberData(values[1]);
+            setDepart(response.data.potlist.departure);
+            setTime(response.data.potlist.ridingTime);
+            setIsHost(response.data.potlist.isHost);
             console.log('here', response.data);
-            console.log('here >> ', response.data.potlist.ridingTime);
-            console.log('here >> ', response.data.potlist.departure);
+            console.log('save', hereData);
           });
         } catch (error) {
           console.log('test err', error);
@@ -59,9 +61,7 @@ function RidingTaxiPage({navigation}) {
     Alert.alert('나가시겠습니까?', '', [
       {
         text: '아니오',
-        onPress: () => {
-          //
-        },
+        onPress: () => {},
         style: 'cancel',
       },
       {
@@ -114,7 +114,7 @@ function RidingTaxiPage({navigation}) {
                 marginLeft: 5,
                 marginVertical: 5,
               }}>
-              {hereData.potlist.ridingTime}
+              {time}
             </Text>
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -132,7 +132,8 @@ function RidingTaxiPage({navigation}) {
                 marginVertical: 5,
                 marginLeft: 5,
               }}>
-              {hereData.potlist.departure}
+              {depart}
+              {/* {hereData.potlist.departure} */}
             </Text>
           </View>
 
@@ -145,10 +146,13 @@ function RidingTaxiPage({navigation}) {
               marginVertical: 10,
               flexDirection: 'row',
             }}>
+            {/* { isHost ?
             <BlueButton
               onPress={() => navigation.navigate('DutchPay')}
-              text="정산하기"
-            />
+              text="정산 요청"
+            /> :
+            <></>
+              } */}
             <OrButton onPress={pressOrBtn} text="나가기" />
           </View>
         </View>
@@ -162,11 +166,13 @@ function RidingTaxiPage({navigation}) {
       />
       <View>
         <View style={{marginTop: 5}}>
-          <FlatList
-            data={hereData.members}
-            renderItem={item => <PeopleItem data={item} />}
-            //keyExtractor={item => item.id.toString()}
-          />
+          <View key={uuid.v4()}>
+            <FlatList
+              data={hereData.members}
+              renderItem={item => <PeopleItem data={item} />}
+              keyExtractor={item => uuid.v4()}
+            />
+          </View>
         </View>
       </View>
     </SafeAreaView>

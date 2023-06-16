@@ -29,7 +29,7 @@ function LoginPage({navigation}) {
     var condition = data.indexOf(exp);
     if (condition != -1) {
       var request_code = data.substring(condition + exp.length);
-      console.log('인가코드: ' + request_code);
+      //  console.log('인가코드: ' + request_code);
       // 토큰값 받기
       requestToken(request_code);
     }
@@ -54,7 +54,7 @@ function LoginPage({navigation}) {
     })
       .then(function (response) {
         returnToken = response.data.access_token;
-        console.log('사람토큰: ' + returnToken); //사람토큰
+        //  console.log('사람토큰: ' + returnToken); //사람토큰
         //storeData(returnToken);
         gettokenAsync(returnToken);
       })
@@ -66,7 +66,7 @@ function LoginPage({navigation}) {
   const storeData = async value => {
     try {
       await AsyncStorage.setItem('@token', value);
-      console.log('[Login] store@token', value);
+      //console.log('[Login] store@token', value);
     } catch (e) {
       // saving error
       console.log('storeData err', e);
@@ -101,12 +101,12 @@ function LoginPage({navigation}) {
                   storeData(value);
                 })
                 .catch(error => {
-                  console.log('auth err', error);
+                  console.log(error);
                 });
 
               navigation.navigate('MainTab', {screen: 'TaxiRouteList'});
             } catch (err) {
-              console.log('gettoken >>', err);
+              console.log(err);
             }
           }
         })
@@ -114,9 +114,9 @@ function LoginPage({navigation}) {
           console.log(err);
         });
 
-      console.log('dd', stringData);
+      //console.log(stringData);
     } catch (err) {
-      console.log('gettoekn >>', err);
+      console.log(err);
     }
   };
 
