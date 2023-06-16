@@ -99,7 +99,6 @@ function LoginPage({navigation}) {
                 data: {kakao_token: returnToken},
               })
                 .then(response => {
-                  // console.log(response.headers.get('Authorization'));
                   const value = response.headers.get('Authorization');
                   //asyncstorage
                   storeData(value);
