@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   FlatList,
   Alert,
-  MeI
+  MeI,
 } from 'react-native';
 import {BlueButton, OrButton} from '../components/MyButtons';
 import PeopleItem from '../components/PeopleItem';
@@ -15,13 +15,15 @@ import HostItem from '../components/HostItem';
 import people from '../people.json';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ScrollView } from 'react-native-gesture-handler';
+import uuid from 'react-native-uuid';
+import {ScrollView} from 'react-native-gesture-handler';
 
 //방장+참여자들 정보(이름,전화번호,전화걸기,문자하기)
 function RidingTaxiPage({navigation}) {
   const [hereData, setHereData] = useState([]);
   const [time, setTime] = useState('');
   const [depart, setDepart] = useState('');
+
   const [me, setMe] = useState([]);
   const [host, setHost] = useState([]);
   const [members, setMembers] = useState([]);
@@ -36,10 +38,9 @@ function RidingTaxiPage({navigation}) {
       const value = await AsyncStorage.getItem('@token');
       if (value != null) {
         try {
-          const requestUrl = `http://localhost:9090/participation/mypot`;
           axios({
             method: 'get',
-            url: requestUrl,
+            url: 'http://localhost:9090/participation/mypot',
             headers: {
               Authorization: `Bearer ${value}`,
             },
@@ -51,11 +52,13 @@ function RidingTaxiPage({navigation}) {
             setIsHost(response.data.potlist.isHost);
             setMe(response.data.me);
             setHost(response.data.host);
+
             setMembers(response.data.members);
             console.log('here', response.data);
             console.log('here >> ', response.data.potlist.ridingTime);
             console.log('here >> ', response.data.potlist.departure);
             console.log('save', hereData);
+
           });
         } catch (error) {
           console.log('test err', error);
@@ -66,19 +69,44 @@ function RidingTaxiPage({navigation}) {
     }
   };
 
-  // const {from, ridingTime} = route.params; //PotListItem에서 from, ridingTime가져옴
+  const onDelete = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@token');
+      if (value != null) {
+        try {
+          axios({
+            method: 'delete',
+            url: 'http://localhost:9090/participation/delete',
+            headers: {
+              Authorization: `Bearer ${value}`,
+            },
+          }).then(response => {
+            onBack();
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const onBack = () => {
+    navigation.goBack();
+  };
+
   const pressOrBtn = () => {
     Alert.alert('나가시겠습니까?', '', [
       {
         text: '아니오',
-        onPress: () => {
-          //
-        },
+        onPress: () => {},
         style: 'cancel',
       },
       {
         text: '네',
-        onPress: () => navigation.goBack(),
+        onPress: () => {
+          onDelete();
+        },
       },
     ]);
   };
@@ -86,7 +114,7 @@ function RidingTaxiPage({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.yesTop}>
-        <Text style={{ fontSize: 18, marginTop: 15, marginLeft: 10,}}>
+        <Text style={{fontSize: 18, marginTop: 15, marginLeft: 10}}>
           탑승 정보
         </Text>
 
@@ -104,20 +132,27 @@ function RidingTaxiPage({navigation}) {
             marginRight: 30,
             marginTop: 10,
           }}>
-            
           <View style={{flexDirection: 'row', alignItems: 'baseline'}}>
-            <Text style={{ fontSize: 18, marginVertical: 5,}}>
-              탑승시간 :  
-            </Text>
-            <Text style={{ fontSize: 25, fontWeight: 'bold', marginLeft: 5, marginVertical: 5}}>
+            <Text style={{fontSize: 18, marginVertical: 5}}>탑승시간 :</Text>
+            <Text
+              style={{
+                fontSize: 25,
+                fontWeight: 'bold',
+                marginLeft: 5,
+                marginVertical: 5,
+              }}>
               {'  ' + time}
             </Text>
           </View>
           <View style={{flexDirection: 'row', alignItems: 'baseline'}}>
-            <Text style={{ fontSize: 18, marginVertical: 5,}}>
-              출발 :  
-            </Text>
-            <Text style={{ fontSize: 25, fontWeight: 'bold', marginLeft: 5, marginVertical: 5}}>
+            <Text style={{fontSize: 18, marginVertical: 5}}>출발 :</Text>
+            <Text
+              style={{
+                fontSize: 25,
+                fontWeight: 'bold',
+                marginLeft: 5,
+                marginVertical: 5,
+              }}>
               {'  ' + depart}
             </Text>
           </View>
@@ -136,9 +171,7 @@ function RidingTaxiPage({navigation}) {
             }}>
             <OrButton onPress={pressOrBtn} text="나가기" />
           </View>
-
         </View>
-        
       </View>
 
       <View
@@ -161,8 +194,8 @@ function RidingTaxiPage({navigation}) {
         }}
       />
 
-      <Text style={{ fontSize: 18, marginTop: 5, marginLeft: 10,}}>
-          정산 현황
+      <Text style={{fontSize: 18, marginTop: 5, marginLeft: 10}}>
+        정산 현황
       </Text>
 
       <View
@@ -172,20 +205,34 @@ function RidingTaxiPage({navigation}) {
           borderBottomWidth: StyleSheet.hairlineWidth,
         }}
       />
-      <ScrollView>
-        { isHost ?
-          <></> :
-          <View style={{marginHorizontal: 15}}>
+      {{isHost} ? (
+        <></>
+      ) : (
+        <View style={{marginHorizontal: 15}}>
           <MeItem data={me} />
         </View>
-        }
+      )}
+      <View style={{marginHorizontal: 15}}>
+        <FlatList
+          data={hereData.members}
+          renderItem={item => <PeopleItem data={item} />}
+          keyExtractor={item => item.id.toString()}
+        />
+      </View>
+      {/* <ScrollView>
+        {{isHost} ? (
+          <></>
+        ) : (
+          <View style={{marginHorizontal: 15}}>
+            <MeItem data={me} />
+          </View>
+        )}
         <View style={{marginHorizontal: 15}}>
           {members.map((user, index) => (
             <PeopleItem data={user} key={index} />
           ))}
         </View>
-      </ScrollView>
-      
+      </ScrollView> */}
     </SafeAreaView>
   );
 }

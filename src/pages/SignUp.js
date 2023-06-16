@@ -36,7 +36,7 @@ function SignUp({route, navigation}) {
       },
     })
       .then(response => {
-        console.log('success', response.data);
+        //  console.log('success', response.data);
         try {
           axios({
             method: 'post',
@@ -59,7 +59,7 @@ function SignUp({route, navigation}) {
       })
       .catch(error => {
         console.log('err:', error);
-        console.log('[SignUp] store@token', value);
+        //   console.log('[SignUp] store@token', value);
       });
   };
 
