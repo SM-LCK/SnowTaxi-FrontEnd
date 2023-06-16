@@ -29,12 +29,7 @@ function MeItem({data}) {
             <Text style={{fontWeight: 'bold', fontSize: 17}}>{nickname}</Text>
           </View>
         </View > 
-        <View style={{marginRight: 5}}>
-        { paid ?
-            <Text style={{fontSize: 15, color:'#4B4BEF'}}>정산완료</Text> :
-            <Text style={{fontSize: 15, color:'#4B4BEF'}}>미정산</Text>
-        }
-        </View>
+        
       </View>
       <View style={{marginRight: 5}}>
         {paid ? (

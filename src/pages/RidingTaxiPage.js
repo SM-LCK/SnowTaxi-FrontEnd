@@ -204,11 +204,14 @@ function RidingTaxiPage({navigation}) {
           borderBottomWidth: StyleSheet.hairlineWidth,
         }}
       />
-      {{isHost} ? (
+      <ScrollView>
+      {isHost ? (
         <></>
       ) : (
+        <View>
         <View style={{marginHorizontal: 15}}>
           <MeItem data={me} />
+        </View>
         </View>
       )}
       <View style={{marginHorizontal: 15}}>
@@ -217,6 +220,7 @@ function RidingTaxiPage({navigation}) {
           ))}
       </View>
 
+      </ScrollView>
     </SafeAreaView>
   );
 }
