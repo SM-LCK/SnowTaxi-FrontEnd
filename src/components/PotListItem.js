@@ -82,7 +82,6 @@ function PotListItem({data, isParticipating}) {
               <BlueButton
             text={'참여중'}
             onPress={() => {
-              postData();
               navigation.navigate('RidingStack', {
                 screen: 'RidingTaxi',
               });
@@ -97,6 +96,7 @@ function PotListItem({data, isParticipating}) {
           text={'참여하기'}
           onPress={() => {
             postData();
+            setTimeout(2000);
             navigation.navigate('RidingStack', {
               screen: 'RidingTaxi',
             });
