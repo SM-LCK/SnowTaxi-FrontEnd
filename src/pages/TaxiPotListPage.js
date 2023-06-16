@@ -16,6 +16,7 @@ import {CreateButton} from '../components/MyButtons';
 import pot from '../potlist_json.json';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import uuid from 'react-native-uuid';
 
 function TaxiPotListPage({route, navigation}) {
   const {id} = route.params;
@@ -170,10 +171,8 @@ function TaxiPotListPage({route, navigation}) {
         ) : (
           <FlatList
             data={hereData}
-            renderItem={({item}) => (
-              <PotListItem data={item} key={item.potlistId} />
-            )}
-            keyExtractor={item => item.potlistId}
+            renderItem={({item}) => <PotListItem data={item} />}
+            keyExtractor={item => uuid.v4()}
           />
         )}
       </View>

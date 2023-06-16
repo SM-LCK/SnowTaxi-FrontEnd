@@ -31,12 +31,6 @@ function PeopleItem({data}) {
           justifyContent: 'space-between',
         }}>
         <View style={styles.profile}>
-          {/* <Image
-            style={styles.profile.picture}
-            source={{
-              uri: 'https://reactnative.dev/img/tiny_logo.png',
-            }}
-          /> */}
           <View style={styles.profile.desc}>
             <View
               style={{
