@@ -57,7 +57,10 @@ function MyPage({navigation}) {
     }
   };
 
-  const goOut = () => navigation.navigate('Login');
+  const goOut = () => {
+    // navigation.navigate('Login');
+    navigation.popToTop();
+  };
 
   const Logout = async () => {
     try {

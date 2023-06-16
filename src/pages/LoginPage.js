@@ -10,16 +10,19 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useIsFocused} from '@react-navigation/native';
 
 function LoginPage({navigation}) {
   const [webViewVisible, setWebViewVisible] = useState(false);
   const [webViewSource, setWebViewSource] = useState(''); //웹뷰의 소스 URI 저장변수
 
+  const isFocused = useIsFocused();
+
   const handleLogin = () => {
+    setWebViewVisible(true);
     setWebViewSource(
       'https://kauth.kakao.com/oauth/authorize?client_id=60968cb46ee97afe3cb98d0b6cac5aa5&redirect_uri=http://localhost:9090/user/kakao&response_type=code',
     );
-    setWebViewVisible(true);
   };
 
   function LogInProgress(data) {
@@ -87,6 +90,7 @@ function LoginPage({navigation}) {
 
           if (stringData == 'SignUp') {
             navigation.navigate(stringData, {id: returnToken});
+            setWebViewVisible(false);
           } else {
             try {
               axios({
@@ -103,8 +107,8 @@ function LoginPage({navigation}) {
                 .catch(error => {
                   console.log(error);
                 });
-
               navigation.navigate('MainTab', {screen: 'TaxiRouteList'});
+              setWebViewVisible(false);
             } catch (err) {
               console.log(err);
             }
@@ -120,68 +124,6 @@ function LoginPage({navigation}) {
     }
   };
 
-  /*
-  const Auth = () => {
-    try {
-      axios({
-        method: 'post',
-        url: 'http://localhost:9090/user/auth',
-        data: {kakao_token: returnToken},
-      }).then(response => {
-        console.log(response.headers.get('Authorization'));
-      });
-    } catch (error) {
-      console.log('auth err', error);
-    }
-  };
-
-*/
-  /*
-  try {
-    axios({
-      method: 'get',
-      url: 'http://localhost:9090/user/isUser',
-      // headers: {
-      //   Authorization: `Bearer ${returnToken}`,
-      // },
-      data: {kakao_token: returnToken},
-    }).then(response => {
-      console.log(response.data);
-      if (response.data === 'SignUp') {
-        navigation.navigate(response.data, {id: returnToken});
-      } else {
-        //Auth();
-        navigation.navigate('MainTab', {screen: 'TaxiRouteList'});
-      }
-    });
-  }catch (error) {
-    console.log('authorizaiton err', err);
-  }
-
-*/
-
-  /*
-  const storeData = async returnValue => {
-    try {
-      await AsyncStorage.setItem('userAccessToken', returnValue);
-      console.log('userAccessToken', returnValue);
-    } catch (e) {
-      // saving error
-      console.log('storeData');
-    }
-  };
-
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('userAccessToken');
-      if (value !== null) {
-        // value previously stored
-      }
-    } catch (e) {
-      // error reading value
-    }
-  };
-*/
   const INJECTED_JS = `window.ReactNativeWebView.postMessage('message from WEB')`;
 
   return (

@@ -16,15 +16,17 @@ import {CreateButton} from '../components/MyButtons';
 import pot from '../potlist_json.json';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import uuid from 'react-native-uuid';
+import {useIsFocused} from '@react-navigation/native';
 
 function TaxiPotListPage({route, navigation}) {
   const {id} = route.params;
 
+  const isFocused = useIsFocused();
+
   const [hereData, setHereData] = useState([]);
   useEffect(() => {
     getData();
-  }, []);
+  }, [isFocused]);
 
   const getData = async () => {
     try {
@@ -171,8 +173,10 @@ function TaxiPotListPage({route, navigation}) {
         ) : (
           <FlatList
             data={hereData}
-            renderItem={({item}) => <PotListItem data={item} />}
-            keyExtractor={item => uuid.v4()}
+            renderItem={({item}) => (
+              <PotListItem data={item} key={item.potlistId} />
+            )}
+            // keyExtractor={item => item.potlistId}
           />
         )}
       </View>
