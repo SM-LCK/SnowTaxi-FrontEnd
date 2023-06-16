@@ -15,7 +15,6 @@ import HostItem from '../components/HostItem';
 import people from '../people.json';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import uuid from 'react-native-uuid';
 import {ScrollView} from 'react-native-gesture-handler';
 
 //방장+참여자들 정보(이름,전화번호,전화걸기,문자하기)
