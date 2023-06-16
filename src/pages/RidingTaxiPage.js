@@ -111,7 +111,8 @@ function RidingTaxiPage({navigation}) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <>
+    { hereData.length != 0 ? (<SafeAreaView style={styles.container}>
       <View style={styles.yesTop}>
         <Text style={{fontSize: 18, marginTop: 15, marginLeft: 10}}>
           탑승 정보
@@ -221,7 +222,21 @@ function RidingTaxiPage({navigation}) {
       </View>
 
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaView>) :
+    (<View
+      style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        flex: 1,
+      }}>
+      <Text style={{fontSize: 15}}>현재 참여중인 팟이 없습니다.</Text>
+    </View>)
+
+
+}
+    </>
+    
   );
 }
 
