@@ -173,7 +173,7 @@ function TaxiPotListPage({route, navigation}) {
             renderItem={({item}) => (
               <PotListItem data={item} key={item.potlistId} />
             )}
-            keyExtractor={item => item.potlistId}
+            // keyExtractor={item => item.potlistId}
           />
         )}
       </View>
