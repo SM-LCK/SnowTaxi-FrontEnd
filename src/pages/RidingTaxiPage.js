@@ -171,10 +171,12 @@ function RidingTaxiPage({navigation}) {
         }}
       />
       <ScrollView>
-        <View style={{marginHorizontal: 15}}>
+        { isHost ?
+          <></> :
+          <View style={{marginHorizontal: 15}}>
           <MeItem data={me} />
         </View>
-          
+        }
         <View style={{marginHorizontal: 15}}>
           <FlatList
             data={hereData.members}
