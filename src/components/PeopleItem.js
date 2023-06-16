@@ -3,7 +3,7 @@ import {Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {BlueButton, GrayButton} from '../components/MyButtons';
 
-function MeItem({data}) {
+function PeopleItem({data}) {
   const {nickname, paid, phone} = data;
   const navigation = useNavigation();
 
@@ -42,4 +42,4 @@ function MeItem({data}) {
   );
 }
 
-export default MeItem;
+export default PeopleItem;

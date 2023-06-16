@@ -12,10 +12,10 @@ import {BlueButton, OrButton} from '../components/MyButtons';
 import PeopleItem from '../components/PeopleItem';
 import MeItem from '../components/MeItem';
 import HostItem from '../components/HostItem';
-import people from '../people.json';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ScrollView} from 'react-native-gesture-handler';
+import { useIsFocused } from '@react-navigation/native';
 
 //방장+참여자들 정보(이름,전화번호,전화걸기,문자하기)
 function RidingTaxiPage({navigation}) {
@@ -23,14 +23,17 @@ function RidingTaxiPage({navigation}) {
   const [time, setTime] = useState('');
   const [depart, setDepart] = useState('');
 
-  const [me, setMe] = useState([]);
+  const [mee, setMee] = useState([]);
   const [host, setHost] = useState([]);
   const [members, setMembers] = useState([]);
-  const [isHost, setIsHost] = useState(true);
+  const [isHost, setIsHost] = useState('false');
+
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [isFocused]);
+
 
   const getData = async () => {
     try {
@@ -48,8 +51,8 @@ function RidingTaxiPage({navigation}) {
             setHereData(response.data);
             setDepart(response.data.potlist.departure);
             setTime(response.data.potlist.ridingTime);
-            setIsHost(response.data.potlist.isHost);
-            setMe(response.data.me);
+            setIsHost(response.data.isHost);
+            setMee(response.data.me);
             setHost(response.data.host);
 
             setMembers(response.data.members);
@@ -206,15 +209,18 @@ function RidingTaxiPage({navigation}) {
         }}
       />
       <ScrollView>
-      {isHost ? (
-        <></>
-      ) : (
         <View>
-        <View style={{marginHorizontal: 15}}>
-          <MeItem data={me} />
-        </View>
+        {isHost ? (
+        <View></View>
+      ) : (
+        <View style={{ marginHorizontal: 15 }}>
+          {setTimeout(() => (
+            <MeItem data={mee} />
+          ), 2000)}
         </View>
       )}
+        </View>
+    
       <View style={{marginHorizontal: 15}}>
           {members.map((user, index) => (
             <PeopleItem data={user} key={index} />
@@ -232,9 +238,7 @@ function RidingTaxiPage({navigation}) {
       }}>
       <Text style={{fontSize: 15}}>현재 참여중인 팟이 없습니다.</Text>
     </View>)
-
-
-}
+  }
     </>
     
   );

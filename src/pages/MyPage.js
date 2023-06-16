@@ -13,15 +13,18 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import CashCard from '../components/CashCard';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 
 function MyPage({navigation}) {
   const [name, setName] = useState('');
   const [phonenum, setPhonenum] = useState('');
   const [cash, setCash] = useState('');
 
+  const isFocused = useIsFocused();
+
   useEffect(() => {
     getData();
-  }, []);
+  }, [cash,isFocused]);
 
   const getData = async () => {
     try {

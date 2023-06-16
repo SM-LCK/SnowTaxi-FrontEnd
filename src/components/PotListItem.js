@@ -96,10 +96,12 @@ function PotListItem({data, isParticipating}) {
           text={'참여하기'}
           onPress={() => {
             postData();
-            setTimeout(2000);
+            setTimeout(() => 
             navigation.navigate('RidingStack', {
               screen: 'RidingTaxi',
-            });
+            }), 2000);
+
+            
           }}
         />
           }
