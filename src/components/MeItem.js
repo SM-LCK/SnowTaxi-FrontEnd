@@ -7,7 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import {BlueButton, GrayButton} from '../components/MyButtons';
 
 function MeItem({data}) {
-  const {nickname, paid, phone} = data.item;
+  const {nickname, paid, phone} = data;
   const navigation = useNavigation();
 
   return (
@@ -29,15 +29,20 @@ function MeItem({data}) {
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
-              <Text style={{fontWeight: 'bold', fontSize: 17}}>{nickname}</Text>
+              <Text style={{fontWeight: 'bold', fontSize: 17}}>{nickname + ' (나)'}</Text>
             </View>
             <Text style={{marginTop: 8, fontSize: 16}}>{phone}</Text>
           </View>
         </View > 
-        <View style={{marginRight: 5}}>
+        <View>
         { paid ?
-            <Text style={{fontSize: 15, color:'#4B4BEF'}}>정산완료</Text> :
-            <Text style={{fontSize: 15, color:'#F07446'}}>미정산</Text>
+            <GrayButton
+                text="정산완료"
+            /> :
+            <BlueButton
+                onPress={() => navigation.navigate('DutchPay')}
+                text="정산하기"
+            />
         }
         </View>
       </View>
