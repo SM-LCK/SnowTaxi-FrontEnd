@@ -1,76 +1,45 @@
-import React, {useState} from 'react';
-import {
-  Image,
-  TouchableOpacity,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import React from 'react';
+import {Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {BlueButton, GrayButton} from '../components/MyButtons';
 
-function PeopleItem({data}) {
+function MeItem({data}) {
   const {nickname, paid, phone} = data.item;
   const navigation = useNavigation();
-  //<Button onPress={{Linking.openURL(`tel:01012341234`)}} />
-  {
-    /*<TouchableOpacity
-        style={styles.titleBoxBottomBtn}
-        onPress={()=>{Linking.openURL(`tel:${phoneNumber}`)}}
-        >
-        <Text>전화하기</Text>
-    </TouchableOpacity>
-*/
-  }
+
   return (
-    <Pressable style={styles.itemContainer}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}>
-        <View style={styles.profile}>
-          <View style={styles.profile.desc}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
-              <Text style={{fontWeight: 'bold', fontSize: 15}}>{nickname}</Text>
-            </View>
-            <Text style={{marginTop: 5}}>{phone}</Text>
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 20,
+        height: 85,
+        backgroundColor: '#F8F8F8',
+        marginBottom: 15,
+        borderRadius: 15,
+      }}>
+      <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'column'}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Text style={{fontWeight: 'bold', fontSize: 17}}>{nickname}</Text>
           </View>
+          <Text style={{marginTop: 8, fontSize: 16}}>{phone}</Text>
         </View>
-        <TouchableOpacity onPress={() => {}} style={{marginRight: 10}}>
-          <Image
-            style={{width: 35, height: 35, resizeMode: 'cover'}}
-            source={require('../../assets/telephone.png')}
-          />
-        </TouchableOpacity>
       </View>
-    </Pressable>
+      <View style={{marginRight: 5}}>
+        {paid ? (
+          <Text style={{fontSize: 15, color: '#4B4BEF'}}>정산완료</Text>
+        ) : (
+          <Text style={{fontSize: 15, color: '#F07446'}}>미정산</Text>
+        )}
+      </View>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
-  itemContainer: {
-    height: 70,
-    backgroundColor: '#F8F8F8',
-    marginBottom: 15,
-    borderRadius: 20,
-  },
-  profile: {
-    flexDirection: 'row',
-    marginTop: 10,
-    marginBottom: 10,
-    picture: {marginLeft: 10},
-    desc: {
-      flexDirection: 'column',
-      marginTop: 5,
-      marginLeft: 20,
-    },
-  },
-});
-
-export default PeopleItem;
+export default MeItem;
