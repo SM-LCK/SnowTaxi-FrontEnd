@@ -7,7 +7,7 @@ const Stack = createNativeStackNavigator();
 
 function RidingStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen
         name="RidingTaxi"
         component={RidingTaxiPage}
