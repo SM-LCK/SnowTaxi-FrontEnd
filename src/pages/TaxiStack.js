@@ -7,7 +7,7 @@ const Stack = createNativeStackNavigator();
 
 function TaxiStack() {
   return (
-    <Stack.Navigator screenOptions={{}}>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen
         name="TaxiRouteList"
         component={TaxiRouteListPage}

@@ -1,5 +1,13 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, Text, StyleSheet, Image, SafeAreaView, Alert} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  SafeAreaView,
+  Alert,
+  Pressable,
+} from 'react-native';
 import PotListItem from '../components/PotListItem';
 //import pot from '../pot.json';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -72,7 +80,7 @@ function TaxiPotListPage({route, navigation}) {
             },
           }).then(response => {
             if (response.data == 'fail') {
-                Alert.alert('이미 참여 중인 팟이 있습니다.', '')
+              Alert.alert('이미 참여 중인 팟이 있습니다.', '');
             }
             getData();
             console.log('post data');
@@ -91,7 +99,15 @@ function TaxiPotListPage({route, navigation}) {
   const month = currentdate.getMonth() + 1;
   const date = currentdate.getDate();
   let day;
-  let week = ['일', '월', '화', '수', '목', '금', '토'];
+  let week = [
+    '일요일',
+    '월요일',
+    '화요일',
+    '수요일',
+    '목요일',
+    '금요일',
+    '토요일',
+  ];
   for (let i = 0; i <= 6; i++) {
     if (currentdate.getDay() == i) {
       day = week[i];
@@ -114,11 +130,16 @@ function TaxiPotListPage({route, navigation}) {
     <SafeAreaView style={styles.container}>
       <View style={styles.first}>
         {/* <Pressable onPress={goBack} style={{left: 10}}>
-            <Icon name="left" size={25} style={{margin: 15}} />
-          </Pressable> */}
+          <Icon name="left" size={25} style={{margin: 15}} />
+        </Pressable> */}
         <Text style={styles.first.title}>
-          {id}
-          {' → 숙명여대 후문'}
+          {id == '숙대입구'
+            ? '숙대입구역 10번 출구'
+            : id == '효창공원앞'
+            ? '효창공원앞역 2번 출구'
+            : id == '남영역'
+            ? '남영역 1번출구'
+            : '서울역 12번 출구'}
         </Text>
         {id == '숙대입구' ? (
           <Image source={require('../../assets/sookmyung2.png')} />
@@ -199,14 +220,14 @@ const styles = StyleSheet.create({
     title: {
       fontSize: 20,
       fontWeight: 'bold',
-      marginBottom: 10,
+      marginBottom: 15,
     },
   },
   second: {
     flex: 2,
-    margin: 15,
+    marginLeft: 15,
     today: {
-      fontSize: 25,
+      fontSize: 22,
       fontWeight: 'bold',
     },
     desc: {

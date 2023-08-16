@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import CashCard from '../components/CashCard';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useIsFocused } from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 
 function MyPage({navigation}) {
   const [name, setName] = useState('');
@@ -24,7 +24,7 @@ function MyPage({navigation}) {
 
   useEffect(() => {
     getData();
-  }, [cash,isFocused]);
+  }, [cash, isFocused]);
 
   const getData = async () => {
     try {
@@ -148,9 +148,29 @@ function MyPage({navigation}) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={{}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
         <Text
+          style={{
+            marginVertical: 15,
+            fontSize: 18,
+            fontWeight: 'bold',
+          }}>
+          마이페이지
+        </Text>
+      </View>
+      <View
+        style={{
+          borderBottomColor: '#A1A1A1',
+          borderBottomWidth: StyleSheet.hairlineWidth,
+        }}
+      />
+      <View style={{}}>
+        {/* <Text
           style={{
             fontSize: 20,
             fontWeight: 'bold',
@@ -158,40 +178,20 @@ function MyPage({navigation}) {
             marginVertical: 15,
           }}>
           나의 정보
-        </Text>
+        </Text> */}
         <View style={styles.myInfo.profile}>
           <View style={styles.myInfo.profile.desc}>
-            <Text style={{fontWeight: 'bold', fontSize: 18}}>{name}님</Text>
+            <Text style={{fontWeight: 'bold', fontSize: 20}}>
+              {name}님, 안녕하세요!
+            </Text>
             <Text style={{marginTop: 10, fontSize: 15}}>{phonenum}</Text>
           </View>
         </View>
       </View>
       <View
         style={{
-          borderBottomColor: 'black',
+          borderBottomColor: '#A1A1A1',
           borderBottomWidth: StyleSheet.hairlineWidth,
-        }}
-      />
-
-      <View style={{}}>
-        <Text
-          style={{
-            fontSize: 20,
-            fontWeight: 'bold',
-            marginHorizontal: 15,
-            marginVertical: 15,
-          }}>
-          나의 캐시
-        </Text>
-        <View style={{justifyContent: 'center', alignItems: 'center'}}>
-          <CashCard data={cash} />
-        </View>
-      </View>
-      <View
-        style={{
-          borderBottomColor: 'black',
-          borderBottomWidth: StyleSheet.hairlineWidth,
-          marginTop: 30,
         }}
       />
 
@@ -219,7 +219,7 @@ function MyPage({navigation}) {
         </View>
         <View
           style={{
-            borderBottomColor: 'black',
+            borderBottomColor: '#A1A1A1',
             borderBottomWidth: StyleSheet.hairlineWidth,
           }}
         />
@@ -246,7 +246,7 @@ function MyPage({navigation}) {
         </View>
         <View
           style={{
-            borderBottomColor: 'black',
+            borderBottomColor: '#A1A1A1',
             borderBottomWidth: StyleSheet.hairlineWidth,
           }}
         />
@@ -256,11 +256,7 @@ function MyPage({navigation}) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    flex: 1,
-    backgroundColor: 'white',
-  },
+  container: {},
   myInfo: {
     profile: {
       flexDirection: 'row',

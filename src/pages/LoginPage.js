@@ -66,16 +66,6 @@ function LoginPage({navigation}) {
       });
   };
 
-  const storeData = async value => {
-    try {
-      await AsyncStorage.setItem('@token', value);
-      //console.log('[Login] store@token', value);
-    } catch (e) {
-      // saving error
-      console.log('storeData err', e);
-    }
-  };
-
   const gettokenAsync = returnToken => {
     let stringData = '';
     try {
@@ -120,6 +110,16 @@ function LoginPage({navigation}) {
       //console.log(stringData);
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const storeData = async value => {
+    try {
+      await AsyncStorage.setItem('@token', value);
+      //console.log('[Login] store@token', value);
+    } catch (e) {
+      // saving error
+      console.log('storeData err', e);
     }
   };
 

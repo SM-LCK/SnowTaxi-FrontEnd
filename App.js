@@ -13,28 +13,16 @@ const Stack = createNativeStackNavigator();
 function App() {
   // 사용자 로그인 여부에 따라 리다이렉션할 경로를 결정합니다.
   //const isLoggedIn = false; // 로그인 여부에 따라서 변경하세요
+  //<Stack.Screen name="Login" component={LoginPage} />
+  //<Stack.Screen name="Signup" component={SignUp} />
+
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name="Login" component={LoginPage} />
-        <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="MainTab" component={MainTab} />
       </Stack.Navigator>
     </NavigationContainer>
-    /*
-    <NavigationContainer>
-      <Stack.Navigator>
-        {isLoggedIn ? (
-          <Stack.Screen name="MainTab" component={MainTab} />
-        ) : (
-          <>
-            <Stack.Screen name="Login" component={LoginPage} />
-            <Stack.Screen name="Signup" component={SignUp} />
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
-    */
+
     /*
     <Router>
       <Switch>
